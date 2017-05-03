@@ -1,10 +1,12 @@
 #Head Soccer Game - Vitor, Gabriel, Pedro e Manzanna
+#Programa main que rodará tudo
+
 import pygame
 
 def main():
     pygame.init()
     bg = pygame.image.load('background2.jpeg')
-    tela = pygame.display.set_mode([803, 673])
+    tela = pygame.display.set_mode([876, 573])
     pygame.display.set_caption('Head Soccer Game')
 
     relogio = pygame.time.Clock()
@@ -28,7 +30,7 @@ def main():
 
 
 
-#Fecha a janela e finaliza o jogo
+    #Fecha a janela e finaliza o jogo
     pygame.quit()
 
 
