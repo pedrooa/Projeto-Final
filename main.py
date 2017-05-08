@@ -71,6 +71,8 @@ class Jogador(pygame.sprite.Sprite):
                 self.acc.x = -acc_jogador
             if keystate[pygame.K_d]:
                 self.acc.x = acc_jogador
+            
+        
         
         #adiciona atrito
         self.acc.x += self.vel.x * atrito_jogador
@@ -142,9 +144,11 @@ def jogo_loop():
             #checa se fechou a tela
             if event.type == pygame.QUIT:
                 sair = True
-            """if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    todos_jogadores.jump()"""
+                    jogador1.jump()
+                if event.key == pygame.K_w:
+                    jogador2.jump()
 
 
         #Update
