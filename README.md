@@ -11,3 +11,9 @@
 -->Montar uma janela com o fundo do jogo
 -->Criar as classes de Bola, Player1, Trave
 -->Movimentação nos Players
+
+12/05
+-->deash - vitturi
+-->fisica bola - azambuja
+-->contato jogadores - ligeiro
+-->menu - neustein
