@@ -16,7 +16,33 @@ BLUE = (0, 0, 255)
 #setting para a movimentacao com vetor
 aceleração_maxima = 0.9
 atrito = -0.12
-gravidade = 0.5
+gravidade = 0.7
+
+class Bola(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(SoccerBall, (40,40))
+        self.image.set_colorkey(RED)
+        self.rect = self.image.get_rect()
+        self.radius = 19
+        self.rect.center = (WIDTH / 2, 250)
+        self.pos = vetor(WIDTH / 2, 250)
+        self.vel = vetor(0, 0)
+        self.acc = vetor(0, 0)
+
+    def update(self):
+        self.acc = vetor(0, gravidade)
+
+        self.vel += self.acc
+        self.pos += self.vel + 0.5 *self.acc
+
+        #Final da tela
+        if self.pos.x + 25 > WIDTH:
+            self.pos.x = WIDTH - 25
+        if self.pos.x - 25 < 0:
+            self.pos.x =  25
+        self.rect.midbottom = self.pos
+
 class Player1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -24,16 +50,16 @@ class Player1(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.radius = 23
-        pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
+       # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.center = (WIDTH /10, HEIGHT - 50)
         self.pos = vetor(WIDTH / 10, HEIGHT-50)
         self.vel = vetor(0, 0)
         self.acc = vetor(0, 0)
         
     def jump(self):
-        self.rect.x += 1 
+        self.rect.y += 1 
         hits = pygame.sprite.spritecollide(self, plataformas, False)
-        self.rect.x -= 1 
+        self.rect.y -= 1 
         if hits:
             self.vel.y = -15
 
@@ -128,16 +154,19 @@ background = pygame.image.load(path.join(img_folder, 'background2.jpeg')).conver
 background_rect = background.get_rect()
 player1_img = pygame.image.load(path.join(img_folder, "cabeca1.png")).convert()
 player2_img = pygame.image.load(path.join(img_folder, "cabeca2.png")).convert()
-
+SoccerBall = pygame.image.load(path.join(img_folder, "SoccerBall.png")).convert()
 
 #Sprites
 all_sprites = pygame.sprite.Group()
 plataformas = pygame.sprite.Group()
+bola = Bola()
 player1 = Player1()
 player2 = Player2()
+
 campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
 all_sprites.add(player1) #ADD Sprites
 all_sprites.add(player2)
+all_sprites.add(bola)
 all_sprites.add(campo_futebol)
 plataformas.add(campo_futebol)
 # Game loop
@@ -160,12 +189,16 @@ while running:
         #colisao dentro entre jogador campo
     bateu = pygame.sprite.spritecollide(player1, plataformas, False)
     bateu_2 = pygame.sprite.spritecollide(player2, plataformas, False)
+    bateu_bola = pygame.sprite.spritecollide(bola, plataformas, False)
     if bateu:
         player1.pos.y = bateu[0].rect.top
         player1.vel.y = 0
     if bateu_2:
         player2.pos.y = bateu_2[0].rect.top
-        player2.vel. y = 0
+        player2.vel.y = 0
+    if bateu_bola:
+        bola.pos.y = bateu_bola[0].rect.top
+        bola.vel.y = 0
     # Draw / render
     screen.fill(BLACK)
     screen.blit(background, background_rect)

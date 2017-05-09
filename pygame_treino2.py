@@ -38,7 +38,7 @@ class Player1(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
-            
+
 class Player2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
