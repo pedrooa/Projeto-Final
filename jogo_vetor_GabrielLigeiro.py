@@ -49,7 +49,7 @@ class Player1(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player1_img, (50, 50))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.radius = 24
+       # self.radius = 24
        # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.center = (WIDTH /10, HEIGHT - 50)
         self.pos = vetor(WIDTH / 10, HEIGHT-50)
@@ -95,7 +95,7 @@ class Player2(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player2_img, (50, 50))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.radius = 24 #melhora no espaco fisico do jogador
+       #self.radius = 24 #melhora no espaco fisico do jogador
         #pygame.draw.circle(self.image, RED, self.rect.center, self.radius) #para ver como o raio do jogador esta
         self.rect.center = (WIDTH * 9/10, HEIGHT - 50)
         self.pos = vetor(WIDTH * 9/10, HEIGHT-50)
@@ -137,6 +137,7 @@ class Campo(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((w,h))
         self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -210,12 +211,17 @@ while running:
         bola.pos.y = bateu_bola[0].rect.top
         bola.vel.y = 0
     if bateu_player1_2 and bateu_player2_1:
-#        player1.vel.x = 0
-#        player2.vel.x = 0
-#        player1.acc.x = 0
-#        player2.acc.x = 0
-        player2.pos.x  = bateu_player1_2[0].rect.right - 12
-        player1.pos.x  = bateu_player2_1[0].rect.left + 12
+        player1.vel.x = 0
+        player2.vel.x = 0
+        player1.acc.x = 0
+        player2.acc.x = 0
+        if player1.pos.x < player2.pos.y:
+
+            player2.pos.x  = bateu_player1_2[0].rect.left + 28
+            player1.pos.x  = bateu_player2_1[0].rect.right - 28
+        elif player1.pos.x < player2.pos.y:
+            player2.pos.x  = bateu_player1_2[0].rect.right - 40
+            player1.pos.x  = bateu_player2_1[0].rect.left + 40
 
     # Draw / render
     screen.fill(BLACK)
