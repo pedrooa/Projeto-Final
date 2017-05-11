@@ -13,6 +13,7 @@ seta_esquerda = 276
 
 clock = pygame.time.Clock()
 timer = 0
+timer2 = 0
 dt = 0.1
 
 while exit:
@@ -21,20 +22,36 @@ while exit:
 			exit = False
 		if event.type == pygame.KEYDOWN:
 			if event.key == seta_direita:		
-				if timer == 0:  # First mouse click.
-				 	timer = 0.001 # Start the timer.
-				# Click again before 0.2 seconds to double click.
-				elif 0.1 < timer < 0.3:
-					print('Dash')
-					timer = 0
-	       		# Increase timer after mouse was pressed the first time.
-				if timer != 0:
+				print("Moveu Direita")
+				if timer == 0:  # First click.
+				 	timer = 0.1 # Start the timer.
+				#Click again before 0.3 seconds to double click.
+				elif timer < 0.3:
+					print('Dash Direita')
+					timer = 0					
+				# Increase timer after mouse was pressed the first time.
+				elif timer != 0:
 					timer += dt
-		            # Reset after 0.5 seconds.
-					if timer >= 0.3:
-						print('Move Direita apenas')
-						timer = 0
-
+					pygame.time.delay(100)
+				# Reset after 0.3 seconds.
+				elif timer >= 0.3:
+					timer = 0
+			elif event.key == seta_esquerda:
+				print("Moveu Esquerda")
+				if timer2 == 0:  # First click.
+				 	timer2 = 0.001 # Start the timer.
+				#Click again before 0.3 seconds to double click.
+				elif timer2 < 0.3:
+					print('Dash Esquerda')
+					timer2 = 0
+				# Increase timer after mouse was pressed the first time.
+				elif timer2 != 0:
+					timer2 += dt
+					pygame.time.delay(100)
+				# Reset after 0.3 seconds.
+				elif timer2 >= 0.3:
+					timer2 = 0
+		
 pygame.display.update()
 pygame.quit()
 quit()
