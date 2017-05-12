@@ -215,11 +215,11 @@ while running:
         player2.vel.x = 0
         player1.acc.x = 0
         player2.acc.x = 0
-        if player1.pos.x < player2.pos.y:
+        if player1.pos.x < player2.pos.x:
 
             player2.pos.x  = bateu_player1_2[0].rect.left + 28
             player1.pos.x  = bateu_player2_1[0].rect.right - 28
-        elif player1.pos.x < player2.pos.y:
+        elif player1.pos.x < player2.pos.x:
             player2.pos.x  = bateu_player1_2[0].rect.right - 40
             player1.pos.x  = bateu_player2_1[0].rect.left + 40
 
