@@ -11,23 +11,35 @@ seta_baixo = 274
 seta_direita = 275
 seta_esquerda = 276
 
-clock = pygame.time.Clock()
-dt = 0.1
+global clock, double_click_event, timer
+double_click_event = pygame.USEREVENT + 1
+timer = 0
+
 
 while exit:
+	
 	for event in pygame.event.get():
 		timer = 0
 		if event.type == pygame.QUIT:
 			exit = False
-		if event.type == pygame.KEYDOWN:
-				if event.key == seta_direita:		
-					print("Moveu Direita")
-					timer = 0.001
-		while timer < 0.2:
-			if event.type == pygame.KEYDOWN:
-				if event.key == seta_direita:		
-					print("dash")
-					timer += dt
+		if event.type == pygame.K_RIGHT:
+			if timer == 0:
+				pygame.time.set_timer(double_click_event, 500)
+				timerset = True
+			else:
+				if timer == 1:
+					pygame.time.set_timer(double_click_event, 0)
+					double_click()
+					timerset = False
+			if timerset:
+				timer = 1
+			else: 
+				timer = 0
+		elif event.type == double_click_event:
+			# timer timed out
+			pygame.time.set_timer(double_click_event, 0)
+			timer = 0
+			print("evt = dble click")
 
 	pygame.display.update()
 pygame.quit()
