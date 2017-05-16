@@ -1,5 +1,6 @@
 # Pygame template - skeleton for a new pygame project
 import pygame
+import math
 from os import path
 vetor = pygame.math.Vector2
 
@@ -17,6 +18,14 @@ BLUE = (0, 0, 255)
 aceleração_maxima = 0.9
 atrito = -0.12
 gravidade = 0.7
+
+
+#configuracoes bola
+arrasto = 0.999
+elasticidade = 0.75
+gravidade_bola = 0.2
+atrito_bola = - 0.10
+
 class Trave_1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -37,121 +46,118 @@ class Trave_2(pygame.sprite.Sprite):
         self.rect.y = HEIGHT - 145
 
 class Bola(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y,raio):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(SoccerBall, (40,40))
+        self.image = pygame.transform.scale(SoccerBall, (34,34))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
-        self.radius = 19
-        self.rect.center = (WIDTH / 2, 250)
-        self.pos = vetor(WIDTH / 2, 250)
-        self.vel = vetor(0, 0)
-        self.acc = vetor(0, 0)
+        self.radius = int(raio)
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.pos = vetor(x,self.rect.centery)
+        self.vel = vetor(0,0)
+        self.acc = vetor(0,0)
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
-        self.acc = vetor(0, gravidade)
-
+        self.acc = vetor(0,0.4)
+        self.quicar()
+        self.vel*= arrasto
         self.vel += self.acc
-        self.pos += self.vel + 0.5 *self.acc
+        self.pos += self.vel
 
-        #Final da tela
-        if self.pos.x + 25 > WIDTH:
-            self.pos.x = WIDTH - 25
-        if self.pos.x - 25 < 0:
-            self.pos.x =  25
-        self.rect.midbottom = self.pos
+        self.rect.center = self.pos
 
-class Player1(pygame.sprite.Sprite):
-    def __init__(self):
+    #Bola quica na tela
+    def quicar(self):
+        if self.pos.x > WIDTH - self.radius:
+            self.pos.x = 2*(WIDTH - self.radius) - self.pos.x
+            self.vel.x = -self.vel.x
+            self.vel*= elasticidade
+
+        elif self.pos.x < self.radius:
+            self.pos.x = 2*self.radius - self.pos.x
+            self.vel.x = -self.vel.x
+            self.vel*=elasticidade
+
+        if self.pos.y > HEIGHT-30 - self.radius:
+            self.pos.y = 2*(HEIGHT-30 - self.radius) - self.pos.y
+            self.vel.y = -self.vel.y
+            self.vel*=elasticidade
+
+        elif self.pos.y < self.radius:
+            self.pos.y = 2*self.radius - self.pos.y
+            self.vel.y = -self.vel.y
+            self.vel*=elasticidade
+
+    def collide(self,other):
+        dx = self.rect.x - other.rect.x
+        dy = self.rect.y - other.rect.y
+
+        dist = math.hypot(dx,dy)
+        soma_raios = self.radius + other.radius
+        if dist < soma_raios:
+            force = 3*(soma_raios - dist)
+            v = vetor(other.rect.x-self.rect.x,other.rect.y-self.rect.y)
+            versor = v/dist
+            FEL = force*versor
+            self.vel -= 0.12*FEL
+
+
+class Jogador(pygame.sprite.Sprite):
+    def __init__(self,x,imagem,teclas):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(player1_img, (50, 50))
+        self.image = pygame.transform.scale(imagem, (50, 50))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-       # self.radius = 24
-       # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
-        self.rect.center = (WIDTH /10, HEIGHT - 50)
-        self.pos = vetor(WIDTH / 10, HEIGHT-50)
+        self.radius = 24
+       #pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
+        self.rect.center = (x, HEIGHT - 50)
+        self.pos = vetor(x, self.rect.centery)
         self.vel = vetor(0, 0)
         self.acc = vetor(0, 0)
-        
+        self.teclas = teclas
+        self.mask = pygame.mask.from_surface(self.image)
+
     def jump(self):
-        self.rect.x += 1 
+        self.rect.y += 1
         hits = pygame.sprite.spritecollide(self, plataformas, False)
-        bateu_trave1 = pygame.sprite.spritecollide(player1, trave_1_group, False)
-        bateu_trave2 = pygame.sprite.spritecollide(player2, trave_2_group, False)
-        self.rect.x -= 1
-        if hits or bateu_trave1 or bateu_trave2:
+        self.rect.y -= 1
+        if hits:
             self.vel.y = -15
 
-        
+
+
     def update(self):
         self.acc = vetor(0, gravidade)
         keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_a]:
-            self.acc.x = -aceleração_maxima
-        if keystate[pygame.K_d]:
-            self.acc.x = aceleração_maxima
-       
+        if self.teclas == 0:
+            if keystate[pygame.K_a]:
+                self.acc.x = -aceleração_maxima
+            if keystate[pygame.K_d]:
+                self.acc.x = aceleração_maxima
+        elif self.teclas ==1:
+
+            if keystate[pygame.K_LEFT]:
+                self.acc.x = -aceleração_maxima
+            if keystate[pygame.K_RIGHT]:
+                self.acc.x = aceleração_maxima
 
 
        #aplicando atrito
-        self.acc.x += self.vel.x *  atrito      
+        self.acc.x += self.vel.x *  atrito
         #equacao de movimento
         self.vel += self.acc
         self.pos += self.vel + 0.5 *self.acc
-        
+
         #bater na parede
         if self.pos.x + 25 > WIDTH:
             self.pos.x = WIDTH - 25
         if self.pos.x - 25 < 0:
             self.pos.x =  25
         self.rect.midbottom = self.pos
-            
-class Player2(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(player2_img, (50, 50))
-        self.image.set_colorkey(BLACK)
-        self.rect = self.image.get_rect()
-       #self.radius = 24 #melhora no espaco fisico do jogador
-        #pygame.draw.circle(self.image, RED, self.rect.center, self.radius) #para ver como o raio do jogador esta
-        self.rect.center = (WIDTH * 10/10, HEIGHT - 200)
-        self.pos = vetor(WIDTH * 10/10, HEIGHT-200)
-        self.vel = vetor(0, 0)
-        self.acc = vetor(0, 0)
-
-    def jump(self):
-        self.rect.x += 1 
-        hits = pygame.sprite.spritecollide(self, plataformas, False)
-        bateu_trave1 = pygame.sprite.spritecollide(player1, trave_1_group, False)
-        bateu_trave2 = pygame.sprite.spritecollide(player2, trave_2_group, False)
-        self.rect.x -= 1
-        if hits or bateu_trave1 or bateu_trave2:
-            self.vel.y = -15
 
 
-    def update(self):
-        self.acc = vetor(0, gravidade)
-        keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT]:
-            self.acc.x = -aceleração_maxima
-        if keystate[pygame.K_RIGHT]:
-            self.acc.x = aceleração_maxima
-       
-
-
-      #aplicando atrito
-        self.acc.x += self.vel.x *  atrito      
-        #equacao de movimento
-        self.vel += self.acc
-        self.pos += self.vel + 0.5 *self.acc
-        
-        #bater na parede
-        if self.pos.x + 25 > WIDTH:
-            self.pos.x = WIDTH - 25
-        if self.pos.x - 25 < 0:
-            self.pos.x =  25
-        self.rect.midbottom = self.pos
 class Campo(pygame.sprite.Sprite):
     def __init__(self, x , y, w, h):
         pygame.sprite.Sprite.__init__(self)
@@ -176,6 +182,7 @@ background_rect = background.get_rect()
 player1_img = pygame.image.load(path.join(img_folder, "cabeca1.png")).convert()
 player2_img = pygame.image.load(path.join(img_folder, "cabeca2.png")).convert()
 SoccerBall = pygame.image.load(path.join(img_folder, "SoccerBall.png")).convert()
+
 trave_1 = pygame.image.load(path.join(img_folder, "trave_1.png")).convert()
 trave_2 = pygame.image.load(path.join(img_folder, "trave_2.png")).convert()
 #Sprites
@@ -183,14 +190,18 @@ all_sprites = pygame.sprite.Group()
 plataformas = pygame.sprite.Group()
 player2_group = pygame.sprite.Group()
 player1_group = pygame.sprite.Group()
+todos_jogadores = pygame.sprite.Group()
+
+bola = Bola(WIDTH/2,HEIGHT/2,20)
+player1 = Jogador(WIDTH*1/3,player1_img,0)
+player2 = Jogador(WIDTH*2/3,player2_img,1)
+
 trave_1_group = pygame.sprite.Group()
 trave_2_group = pygame.sprite.Group()
 
-bola = Bola()
-player1 = Player1()
-player2 = Player2()
 trave1 = Trave_1()
 trave2 = Trave_2()
+
 campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
 
 all_sprites.add(player1) #ADD Sprites
@@ -204,6 +215,8 @@ player2_group.add(player2)
 player1_group.add(player1)
 trave_1_group.add(trave1)
 trave_2_group.add(trave2)
+todos_jogadores.add(player1)
+todos_jogadores.add(player2)
 
 # Game loop
 running = True
@@ -225,7 +238,7 @@ while running:
         #colisao dentro entre jogador campo
     bateu = pygame.sprite.spritecollide(player1, plataformas, False)
     bateu_2 = pygame.sprite.spritecollide(player2, plataformas, False)
-    bateu_bola = pygame.sprite.spritecollide(bola, plataformas, False)
+    
     #colisao entre players
     bateu_player1_2 = pygame.sprite.spritecollide(player1, player2_group, False)
     bateu_player2_1 = pygame.sprite.spritecollide(player2, player1_group, False)
@@ -234,13 +247,11 @@ while running:
     if bateu:
         player1.pos.y = bateu[0].rect.top + 1
         player1.vel.y = 0
-        
+
     if bateu_2:
         player2.pos.y = bateu_2[0].rect.top + 1
         player2.vel.y = 0
-    if bateu_bola:
-        bola.pos.y = campo_futebol.rect.top
-        bola.vel.y = 0
+
     if bateu_player1_2 and bateu_player2_1:
         player1.vel.x = 0
         player2.vel.x = 0
@@ -275,7 +286,12 @@ while running:
         if player2.pos.y - 60 <= trave2.rect.top:
             player2.vel.y = 0
             player2.vel.y = 5
-            
+
+    #Colisao da bola com os jogadores
+    colisao = pygame.sprite.spritecollide(bola,todos_jogadores,False,pygame.sprite.collide_circle)
+    if colisao:
+        bola.collide(colisao[0])
+
 
     # Draw / render
     screen.fill(BLACK)
