@@ -13,7 +13,13 @@
 -->Movimentação nos Players
 
 12/05
--->deash - vitturi
+-->dash - vitturi
 -->fisica bola - azambuja
 -->contato jogadores - ligeiro
 -->menu - neustein
+
+19/05
+--> dash & organizar o codigo - vitturi
+--> trajetoria e smbra da bola - azambusha
+--> Score - ligeiro
+--> menu - Neustein (manzana)
