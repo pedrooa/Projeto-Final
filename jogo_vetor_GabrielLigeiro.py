@@ -1,6 +1,30 @@
-# Pygame DesSoft - HeadSoccer
-import pygame, math, variaveis
+# Pygame template - skeleton for a new pygame project
+import pygame
+import math
 from os import path
+vetor = pygame.math.Vector2
+
+WIDTH = 876
+HEIGHT = 573
+FPS = 60
+# define colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+#setting para a movimentacao com vetor
+aceleração_maxima = 0.9
+atrito = -0.12
+gravidade = 0.7
+
+
+#configuracoes bola
+arrasto = 0.999
+elasticidade = 0.75
+gravidade_bola = 0.2
+atrito_bola = - 0.10
 
 class Trave_1(pygame.sprite.Sprite):
     def __init__(self):
@@ -80,6 +104,10 @@ class Bola(pygame.sprite.Sprite):
             self.vel -= 0.12*FEL
 
 
+
+
+
+
 class Jogador(pygame.sprite.Sprite):
     def __init__(self,x,imagem,teclas):
         pygame.sprite.Sprite.__init__(self)
@@ -95,10 +123,6 @@ class Jogador(pygame.sprite.Sprite):
         self.teclas = teclas
         self.mask = pygame.mask.from_surface(self.image)
 
-    def dash(self):
-        self.vel.x = self.vel.x * 4
-
-
     def jump(self):
         self.rect.y += 1
         hits = pygame.sprite.spritecollide(self, plataformas, False)
@@ -106,8 +130,7 @@ class Jogador(pygame.sprite.Sprite):
         if hits:
             self.vel.y = -15
 
-    def dash(self):
-        self.vel.y = self.vel.y * 4
+
 
     def update(self):
         self.acc = vetor(0, gravidade)
@@ -144,71 +167,40 @@ class Jogador(pygame.sprite.Sprite):
 class Campo(pygame.sprite.Sprite):
     def __init__(self, x , y, w, h):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(grass, (WIDTH, HEIGHT))
-        self.image.set_colorkey(RED)
         self.image = pygame.Surface((w,h))
-        #self.image.fill(GREEN)
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
 #funções
+font_name = pygame.font.match_font('arial')
 def draw_text(surf, text, size, x, y):
     font = pygame.font.Font(font_name, size)
     text_surface = font.render(text, True, WHITE)
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
-<<<<<<< HEAD
+def playMusicJ3():
+    pygame.mixer.music.load("J3.mp3")
+    pygame.mixer.music.play(-1, 0.0)
 
-#Inicia pygame
-=======
+def playMusicNaruto():
+    pygame.mixer.music.load("Naruto.mp3")
+    pygame.mixer.music.play(-1, 0.0)
 #SCORE
 player1_score = 0
 player2_score = 0
 timer = 0
+
 # initialize pygame and create window
->>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
 pygame.init()
 pygame.mixer.init()
-
-#Variaveis gerais
-font_name = pygame.font.match_font('arial')
-vetor = pygame.math.Vector2
-running = True
-WIDTH = 876
-HEIGHT = 573
-FPS = 45
-
-#Cores em Hexadecimal
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-
-#Setando para a movimentacao com vetor
-aceleração_maxima = 0.9
-atrito = -0.12
-gravidade = 0.7
-
-#Score
-player1_score = 0
-player2_score = 0
-
-#Variaveis Bola
-arrasto = 0.999
-elasticidade = 0.75
-gravidade_bola = 0.2
-atrito_bola = - 0.10
-
-#Cria a tela, determina a fonte e inicia o Clock
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Head Soccer pre-pre-pre-Alpha")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 16)
-
 #carregando Imagens
+
 game_folder = path.dirname(__file__)
 img_folder = path.join(game_folder, "Imagens")
 background = pygame.image.load(path.join(img_folder, 'background2.jpeg')).convert()
@@ -216,10 +208,10 @@ background_rect = background.get_rect()
 player1_img = pygame.image.load(path.join(img_folder, "cabeca1.png")).convert()
 player2_img = pygame.image.load(path.join(img_folder, "cabeca2.png")).convert()
 SoccerBall = pygame.image.load(path.join(img_folder, "SoccerBall.png")).convert()
+
 trave_1 = pygame.image.load(path.join(img_folder, "trave_1.png")).convert()
 trave_2 = pygame.image.load(path.join(img_folder, "trave_2.png")).convert()
-
-#Sprite Group
+#Sprites
 all_sprites = pygame.sprite.Group()
 plataformas = pygame.sprite.Group()
 player2_group = pygame.sprite.Group()
@@ -228,20 +220,18 @@ todos_jogadores = pygame.sprite.Group()
 trave_1_group = pygame.sprite.Group()
 trave_2_group = pygame.sprite.Group()
 
-<<<<<<< HEAD
-#Criando Objetos
-bola = Bola(5,HEIGHT/2,20)
-=======
 bola = Bola(WIDTH/2 ,HEIGHT/2,20)
->>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
 player1 = Jogador(WIDTH*1/3,player1_img,0)
 player2 = Jogador(WIDTH*2/3,player2_img,1)
+
+
+
 trave1 = Trave_1()
 trave2 = Trave_2()
+
 campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
 
-#ADD Sprites
-all_sprites.add(player1)
+all_sprites.add(player1) #ADD Sprites
 all_sprites.add(player2)
 all_sprites.add(bola)
 all_sprites.add(campo_futebol)
@@ -255,10 +245,10 @@ trave_2_group.add(trave2)
 todos_jogadores.add(player1)
 todos_jogadores.add(player2)
 
-
 # Game loop
+running = True
 while running:
-    # FPS
+    # keep loop running at the right speed
     clock.tick(FPS)
     # Process input (events)
     for event in pygame.event.get():
@@ -270,18 +260,13 @@ while running:
                 player1.jump()
             if event.key == pygame.K_UP:
                 player2.jump()
-<<<<<<< HEAD
-            
-    
-=======
             if event.key == pygame.K_s:
                 player1.dash()
             if event.key == pygame.K_DOWN:
                 player2.dash()
     # Update
->>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
     all_sprites.update()
-    #colisao dentro entre jogador campo
+        #colisao dentro entre jogador campo
     bateu = pygame.sprite.spritecollide(player1, plataformas, False)
     bateu_2 = pygame.sprite.spritecollide(player2, plataformas, False)
     
@@ -292,18 +277,14 @@ while running:
     bateu_trave2 = pygame.sprite.spritecollide(player2, trave_2_group, False)
     bateu_bola_trave_1 = pygame.sprite.spritecollide(bola, trave_1_group, False)
     bateu_bola_trave_2 = pygame.sprite.spritecollide(bola, trave_2_group, False)
-    
-    #Colisão Player1
     if bateu:
         player1.pos.y = bateu[0].rect.top + 1
         player1.vel.y = 0
 
-    #Colisão Player2
     if bateu_2:
         player2.pos.y = bateu_2[0].rect.top + 1
         player2.vel.y = 0
 
-    #Colisão entre Players
     if bateu_player1_2 and bateu_player2_1:
         player1.vel.x = 0
         player2.vel.x = 0
@@ -320,7 +301,6 @@ while running:
             player1.pos.y = player2.rect.top + 2
             player1.vel.y = 0
             
-    #Colisão entre Player - Trave
     if bateu_trave1:
         if player1.pos.y -  10 <= trave1.rect.top and player1.vel.y  > 0:
             player1.pos.y = trave1.rect.top + 2
@@ -340,11 +320,6 @@ while running:
             bola.vel.y = -bola.vel.y
         if bola.pos.y - bola.radius >= trave1.rect.top:
             bola.vel.y = -bola.vel.y
-<<<<<<< HEAD
-            #player2_score += 1
-        if bola.pos.y + bola.radius > trave1.rect.bottom:
-            player2_score += 1
-=======
             timer += 1
             if timer == 5:
                 player2_score += 1
@@ -354,20 +329,17 @@ while running:
                 bola.vel.y = 0
                 player1.pos.x = WIDTH/3
                 player2.pos.x = WIDTH * 2/3
+                player1.vel.x = 0
+                player1.vel.y = 0
+                player2.vel.x = 0
+                player2.vel.y = 0
                 timer = 0
->>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
 
-    #Colisão entre Bola - Trave
     if bateu_bola_trave_2:
         if bola.pos.y <= trave2.rect.top and bola.vel.y > 0:
             bola.vel.y = -bola.vel.y
         if bola.pos.y - bola.radius >= trave2.rect.top:
             bola.vel.y = -bola.vel.y
-<<<<<<< HEAD
-            player1_score += 1
-
-    #Sprite Collide da bola - player
-=======
             timer += 1
             if timer == 5:
                 player1_score += 1
@@ -377,34 +349,34 @@ while running:
                 bola.vel.y = 0
                 player1.pos.x = WIDTH/3
                 player2.pos.x = WIDTH * 2/3
+                player1.vel.x = 0
+                player1.vel.y = 0
+                player2.vel.x = 0
+                player2.vel.y = 0
                 timer = 0
        #     bola.pos = (WIDTH/2,HEIGHT/2)
     #Colisao da bola com os jogadores
->>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
     colisao = pygame.sprite.spritecollide(bola,todos_jogadores,False,pygame.sprite.collide_circle)
     if colisao:
         bola.collide(colisao[0])
-
-
+    #timer do score
+    timer2 = pygame.time.get_ticks()/1000
+    #musica 
+ #   playMusicNaruto()
     # Draw / render
     screen.fill(BLACK)
     screen.blit(background, background_rect)
-
-    # Desenha e Flipa
+    # Info and flip screen
     screen.blit(font.render("fps: " + str(clock.get_fps()), 1, WHITE), (0,0))
     draw_text(screen,":", 40, WIDTH/2 - 20, 10)
-<<<<<<< HEAD
-    draw_text(screen,str(player1_score), 40, WIDTH/2 - 40, 10)
-    draw_text(screen,str(player2_score), 40, WIDTH/2 + 2, 10)
-    all_sprites.draw(screen) 
-=======
     draw_text(screen,str(player1_score), 40, WIDTH/2 - 50, 10)
     draw_text(screen,str(player2_score), 40, WIDTH/2 + 10, 10)
+    draw_text(screen,str(round(timer2,1)), 40, WIDTH*5/6, 10)
     all_sprites.draw(screen) #rodando os sprites
     #pygame.draw.rect(screen, GREEN, [0,HEIGHT - 30,WIDTH,30])
     # *after* drawing everything, flip the display
->>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
     pygame.display.flip()
+    if timer2 >= 60:
+        break
 
-#Fecha o jogo
 pygame.quit()
