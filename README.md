@@ -23,3 +23,9 @@
 --> trajetoria e smbra da bola - azambusha
 --> Score - ligeiro
 --> menu - Neustein (manzana)
+
+26/05
+--> tela de entrada & tela vitoria/derrota - Andre Neustein(manzana)
+--> bugs de contato - Azambusha
+--> dash & musicas & efeitos sonoros - Vitor
+--> power ups &  ScoreBoard & escolha personagem - Gabriel Ligeiro
