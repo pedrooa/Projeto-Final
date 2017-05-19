@@ -23,7 +23,7 @@ gravidade = 0.7
 #configuracoes bola
 arrasto = 0.999
 elasticidade = 0.75
-gravidade_bola = 0.2
+gravidade_bola = 0.6
 atrito_bola = - 0.10
 
 class Trave_1(pygame.sprite.Sprite):
@@ -48,8 +48,9 @@ class Trave_2(pygame.sprite.Sprite):
 class Bola(pygame.sprite.Sprite):
     def __init__(self,x,y,raio):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(SoccerBall, (34,34))
-        self.image.set_colorkey(RED)
+        self.image_orig = pygame.transform.scale(SoccerBall, (34,34))
+        self.image_orig.set_colorkey(RED)
+        self.image = self.image_orig.copy()
         self.rect = self.image.get_rect()
         self.radius = int(raio)
         self.rect.centerx = x
@@ -57,11 +58,37 @@ class Bola(pygame.sprite.Sprite):
         self.pos = vetor(x,self.rect.centery)
         self.vel = vetor(0,0)
         self.acc = vetor(0,0)
-        self.mask = pygame.mask.from_surface(self.image)
+        self.rot = 0
+        #self.rot_speed = 5
+        self.last_update = pygame.time.get_ticks()
+
+    def rotate(self):
+        now = pygame.time.get_ticks()
+        if self.vel.x > 1 :
+            self.rot_speed = -5
+            if now - self.last_update > 50:
+                self.last_update = now
+                self.rot = (self.rot + self.rot_speed)%360
+                new_image = pygame.transform.rotate(self.image_orig,self.rot)
+                old_center = self.rect.center
+                self.image = new_image
+                self.rect  = self.image.get_rect()
+                self.rect_center = old_center
+        elif self.vel.x < -1 :
+            self.rot_speed = 5
+            if now - self.last_update > 50:
+                self.last_update = now
+                self.rot = (self.rot + self.rot_speed)%360
+                new_image = pygame.transform.rotate(self.image_orig,self.rot)
+                old_center = self.rect.center
+                self.image = new_image
+                self.rect  = self.image.get_rect()
+                self.rect_center = old_center
 
     def update(self):
-        self.acc = vetor(0,0.4)
+        self.acc = vetor(0,gravidade_bola)
         self.quicar()
+        self.rotate()
         self.vel*= arrasto
         self.vel += self.acc
         self.pos += self.vel
@@ -102,10 +129,7 @@ class Bola(pygame.sprite.Sprite):
             versor = v/dist
             FEL = force*versor
             self.vel -= 0.12*FEL
-
-
-
-
+            dist = soma_raios
 
 
 class Jogador(pygame.sprite.Sprite):
@@ -269,7 +293,7 @@ while running:
         #colisao dentro entre jogador campo
     bateu = pygame.sprite.spritecollide(player1, plataformas, False)
     bateu_2 = pygame.sprite.spritecollide(player2, plataformas, False)
-    
+
     #colisao entre players
     bateu_player1_2 = pygame.sprite.spritecollide(player1, player2_group, False)
     bateu_player2_1 = pygame.sprite.spritecollide(player2, player1_group, False)
@@ -300,7 +324,7 @@ while running:
         if player1.pos.y < player2.pos.y:
             player1.pos.y = player2.rect.top + 2
             player1.vel.y = 0
-            
+
     if bateu_trave1:
         if player1.pos.y -  10 <= trave1.rect.top and player1.vel.y  > 0:
             player1.pos.y = trave1.rect.top + 2
@@ -361,7 +385,7 @@ while running:
         bola.collide(colisao[0])
     #timer do score
     timer2 = pygame.time.get_ticks()/1000
-    #musica 
+    #musica
  #   playMusicNaruto()
     # Draw / render
     screen.fill(BLACK)
