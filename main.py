@@ -9,6 +9,7 @@ current_path = os.getcwd()
 print(current_path)
 sys.path.insert(0, os.path.join(current_path, "../pymunk-4.0.0"))
 pygame.init()
+pygame.mixer.init()
 
 
 #configuracoes
@@ -94,7 +95,7 @@ class Chao(pygame.sprite.Sprite):
         self.image.fill(cor_verde)
         self.rect = self.image.get_rect()
         self.rect.x = x
-        self.rect.y = y
+        self.rect.y = y\
 
 
 #Criar grupos de sprites
@@ -113,6 +114,10 @@ todos_jogadores.add(jogador2)
 
 # Loop do jogo
 def jogo_loop():
+
+    pygame.mixer.music.load('J3.mp3')
+    pygame.mixer.music.play(-1,0.0)
+
     bola_x = 438
     bola_y = 513
     bola_raio = 30
@@ -123,7 +128,7 @@ def jogo_loop():
 
 
     while not sair:
-
+        
         #Roda em x FPS
         relogio.tick(FPS)
 

@@ -23,8 +23,10 @@ while exit:
 		if event.type == pygame.QUIT:
 			exit = False
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_p:
-				print(pygame.key.set_repeat(1,200))
+			if event.key == pygame.K_LSHIFT:
+				#Velocidade do player duplica e depois de algum tempo volta ao normal
+			if event.key == pygame.K_RCTRL:
+				#Velocidade do player duplica e depois de algum tempo volta ao normal
 
 
 
