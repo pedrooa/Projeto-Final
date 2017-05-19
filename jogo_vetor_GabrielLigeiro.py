@@ -137,6 +137,8 @@ class Jogador(pygame.sprite.Sprite):
         if self.pos.x - 25 < 0:
             self.pos.x =  25
         self.rect.midbottom = self.pos
+    def dash(self):
+        self.vel.x = self.vel.x * 4
 
 
 class Campo(pygame.sprite.Sprite):
@@ -157,8 +159,16 @@ def draw_text(surf, text, size, x, y):
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
+<<<<<<< HEAD
 
 #Inicia pygame
+=======
+#SCORE
+player1_score = 0
+player2_score = 0
+timer = 0
+# initialize pygame and create window
+>>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
 pygame.init()
 pygame.mixer.init()
 
@@ -218,8 +228,12 @@ todos_jogadores = pygame.sprite.Group()
 trave_1_group = pygame.sprite.Group()
 trave_2_group = pygame.sprite.Group()
 
+<<<<<<< HEAD
 #Criando Objetos
 bola = Bola(5,HEIGHT/2,20)
+=======
+bola = Bola(WIDTH/2 ,HEIGHT/2,20)
+>>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
 player1 = Jogador(WIDTH*1/3,player1_img,0)
 player2 = Jogador(WIDTH*2/3,player2_img,1)
 trave1 = Trave_1()
@@ -256,8 +270,16 @@ while running:
                 player1.jump()
             if event.key == pygame.K_UP:
                 player2.jump()
+<<<<<<< HEAD
             
     
+=======
+            if event.key == pygame.K_s:
+                player1.dash()
+            if event.key == pygame.K_DOWN:
+                player2.dash()
+    # Update
+>>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
     all_sprites.update()
     #colisao dentro entre jogador campo
     bateu = pygame.sprite.spritecollide(player1, plataformas, False)
@@ -314,25 +336,51 @@ while running:
             player2.vel.y = 0
             player2.vel.y = 5
     if bateu_bola_trave_1:
-        player2_score += 1
-        if bola.pos.y + bola.radius <= trave1.rect.top and bola.vel.y > 0:
+        if bola.pos.y <= trave1.rect.top and bola.vel.y > 0:
             bola.vel.y = -bola.vel.y
-        if bola.pos.y - bola.radius <= trave1.rect.top:
+        if bola.pos.y - bola.radius >= trave1.rect.top:
             bola.vel.y = -bola.vel.y
+<<<<<<< HEAD
             #player2_score += 1
         if bola.pos.y + bola.radius > trave1.rect.bottom:
             player2_score += 1
+=======
+            timer += 1
+            if timer == 5:
+                player2_score += 1
+                bola.pos.y = HEIGHT/2
+                bola.pos.x = WIDTH/2
+                bola.vel.x = 0
+                bola.vel.y = 0
+                player1.pos.x = WIDTH/3
+                player2.pos.x = WIDTH * 2/3
+                timer = 0
+>>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
 
     #Colisão entre Bola - Trave
     if bateu_bola_trave_2:
-        player1_score += 1
-        if bola.pos.y + bola.radius <= trave2.rect.top and bola.vel.y > 0:
+        if bola.pos.y <= trave2.rect.top and bola.vel.y > 0:
             bola.vel.y = -bola.vel.y
-        if bola.pos.y - bola.radius <= trave2.rect.top:
+        if bola.pos.y - bola.radius >= trave2.rect.top:
             bola.vel.y = -bola.vel.y
+<<<<<<< HEAD
             player1_score += 1
 
     #Sprite Collide da bola - player
+=======
+            timer += 1
+            if timer == 5:
+                player1_score += 1
+                bola.pos.y = HEIGHT/2
+                bola.pos.x = WIDTH/2
+                bola.vel.x = 0
+                bola.vel.y = 0
+                player1.pos.x = WIDTH/3
+                player2.pos.x = WIDTH * 2/3
+                timer = 0
+       #     bola.pos = (WIDTH/2,HEIGHT/2)
+    #Colisao da bola com os jogadores
+>>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
     colisao = pygame.sprite.spritecollide(bola,todos_jogadores,False,pygame.sprite.collide_circle)
     if colisao:
         bola.collide(colisao[0])
@@ -345,9 +393,17 @@ while running:
     # Desenha e Flipa
     screen.blit(font.render("fps: " + str(clock.get_fps()), 1, WHITE), (0,0))
     draw_text(screen,":", 40, WIDTH/2 - 20, 10)
+<<<<<<< HEAD
     draw_text(screen,str(player1_score), 40, WIDTH/2 - 40, 10)
     draw_text(screen,str(player2_score), 40, WIDTH/2 + 2, 10)
     all_sprites.draw(screen) 
+=======
+    draw_text(screen,str(player1_score), 40, WIDTH/2 - 50, 10)
+    draw_text(screen,str(player2_score), 40, WIDTH/2 + 10, 10)
+    all_sprites.draw(screen) #rodando os sprites
+    #pygame.draw.rect(screen, GREEN, [0,HEIGHT - 30,WIDTH,30])
+    # *after* drawing everything, flip the display
+>>>>>>> 29c823932248abedc66fbc7c8d9965e5ccb82d21
     pygame.display.flip()
 
 #Fecha o jogo
