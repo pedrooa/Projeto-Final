@@ -1,5 +1,5 @@
-import pygame, funcoes, classes, math
 from variaveis import *
+import pygame, funcoes, classes, math
 from os import path
 
 #Inicia pygame
@@ -8,8 +8,9 @@ pygame.mixer.init()
 
 running = True
 while running:
-	gameLoop()
-	gameEvents()
-	gameDraw()
-	gameQuit()
+	funcoes.gameLoop()
+	funcoes.gameEvents()
+	funcoes.gameDraw()
+	funcoes.gameScoreTime()
+	funcoes.gameQuit()
 	

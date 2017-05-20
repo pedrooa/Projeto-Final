@@ -1,4 +1,5 @@
-import pygame, math, classes, funcoes
+import pygame, math, classes
+from funcoes import *
 from os import path
 
 #Variaveis gerais
@@ -7,28 +8,34 @@ vetor = pygame.math.Vector2
 running = True
 WIDTH = 876
 HEIGHT = 573
-FPS = 45
+FPS = 40
 
-#Cores em Hexadecimal
+# define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-#Setando para a movimentacao com vetor
+#setting para a movimentacao com vetor
 aceleração_maxima = 0.9
 atrito = -0.12
 gravidade = 0.7
 
-
-#Variaveis Bola
+#configuracoes bola
 arrasto = 0.999
 elasticidade = 0.75
 gravidade_bola = 0.2
 atrito_bola = - 0.10
 
-#Cria a tela, determina a fonte e inicia o Clock
+#SCORE
+player1_score = 0
+player2_score = 0
+timer = 0
+
+# initialize pygame and create window
+pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Head Soccer pre-pre-pre-Alpha")
 clock = pygame.time.Clock()
@@ -44,8 +51,9 @@ player2_img = pygame.image.load(path.join(img_folder, "cabeca2.png")).convert()
 SoccerBall = pygame.image.load(path.join(img_folder, "SoccerBall.png")).convert()
 trave_1 = pygame.image.load(path.join(img_folder, "trave_1.png")).convert()
 trave_2 = pygame.image.load(path.join(img_folder, "trave_2.png")).convert()
+grass = pygame.image.load(path.join(img_folder, "grass.png")).convert()
 
-#Sprite Group
+#Sprites Groups
 all_sprites = pygame.sprite.Group()
 plataformas = pygame.sprite.Group()
 player2_group = pygame.sprite.Group()
@@ -54,16 +62,19 @@ todos_jogadores = pygame.sprite.Group()
 trave_1_group = pygame.sprite.Group()
 trave_2_group = pygame.sprite.Group()
 
-#Criando Objetos
-bola = classes.Bola(5,HEIGHT/2,20)
+#Crianção de objetos das classes
+bola = classes.Bola(WIDTH/2 ,HEIGHT/2,20)
+
 player1 = classes.Jogador(WIDTH*1/3,player1_img,0)
 player2 = classes.Jogador(WIDTH*2/3,player2_img,1)
+
 trave1 = classes.Trave_1()
 trave2 = classes.Trave_2()
+
 campo_futebol = classes.Campo(0,HEIGHT - 30,WIDTH,30)
 
-#ADD Sprites
-all_sprites.add(player1)
+#Adiciona os sprites ao grupo
+all_sprites.add(player1) 
 all_sprites.add(player2)
 all_sprites.add(bola)
 all_sprites.add(campo_futebol)

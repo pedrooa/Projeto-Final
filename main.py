@@ -115,7 +115,7 @@ todos_jogadores.add(jogador2)
 # Loop do jogo
 def jogo_loop():
 
-    pygame.mixer.music.load('J3.mp3')
+    pygame.mixer.music.load('HitBall.bfxrsound')
     pygame.mixer.music.play(-1,0.0)
 
     bola_x = 438

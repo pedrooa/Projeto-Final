@@ -1,13 +1,14 @@
 #Classes
-import pygame, math, funcoes
+import pygame, math
 from os import path
 from variaveis import *
+from funcoes import *
 
 
 class Trave_1(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(variaves.trave_1, (60,120))
+        self.image = pygame.transform.scale(trave_1, (60,120))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
         self.rect.x = 2
@@ -81,7 +82,6 @@ class Bola(pygame.sprite.Sprite):
             FEL = force*versor
             self.vel -= 0.12*FEL
 
-
 class Jogador(pygame.sprite.Sprite):
     def __init__(self,x,imagem,teclas):
         pygame.sprite.Sprite.__init__(self)
@@ -119,7 +119,6 @@ class Jogador(pygame.sprite.Sprite):
             if keystate[pygame.K_RIGHT]:
                 self.acc.x = aceleração_maxima
 
-
        #aplicando atrito
         self.acc.x += self.vel.x *  atrito
         #equacao de movimento
@@ -132,6 +131,9 @@ class Jogador(pygame.sprite.Sprite):
         if self.pos.x - 25 < 0:
             self.pos.x =  25
         self.rect.midbottom = self.pos
+
+    def dash(self):
+        self.vel.x = self.vel.x * 4
 
 
 class Campo(pygame.sprite.Sprite):
