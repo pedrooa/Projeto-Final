@@ -204,6 +204,8 @@ class Game:
 		self.todos_jogadores.add(self.player1)
 		self.todos_jogadores.add(self.player2)
 
+		self.run()
+
 	def run(self):
 		#Game loop
 		self.playing = True
@@ -231,11 +233,13 @@ class Game:
 	    pg.mixer.music.play(-1, 0.0)'''
 
 	def colosion(self):
-		#colisao dentro entre jogador campo
-	    self.bateu = pg.sprite.spritecollide(self.player1, self.plataformas, False)
-	    self.bateu_2 = pg.sprite.spritecollide(self.player2, self.plataformas, False)
+		#Colisao dentro entre jogador campo
+	    self.bateu = pg.sprite.spritecollide(self.player1, self.plataformas,\
+		 												False)
+	    self.bateu_2 = pg.sprite.spritecollide(self.player2, self.plataformas,\
+		 												False)
 
-	    #colisao entre players
+	    #Colisao entre players
 	    self.bateu_player1_2 = pg.sprite.spritecollide(self.player1, \
 														self.player2_group, False)
 	    self.bateu_player2_1 = pg.sprite.spritecollide(self.player2, \
