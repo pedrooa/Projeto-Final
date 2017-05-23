@@ -3,7 +3,7 @@ import math
 from os import path
 from settings import *
 
-class Trave_1(pygame.sprite.Sprite):
+class Trave_1(pg.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(trave_1, (TRAVE_W,TRAVE_H))
@@ -12,7 +12,7 @@ class Trave_1(pygame.sprite.Sprite):
         self.rect.x = 2
         self.rect.y = HEIGHT - 145
 
-class Trave_2(pygame.sprite.Sprite):
+class Trave_2(pg.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(trave_2, (TRAVE_W,TRAVE_H))
@@ -22,7 +22,7 @@ class Trave_2(pygame.sprite.Sprite):
         self.rect.x = WIDTH - 60
         self.rect.y = HEIGHT - 145
 
-class Bola(pygame.sprite.Sprite):
+class Bola(pg.sprite.Sprite):
     def __init__(self,x,y,raio):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(SoccerBall, (BOLA_W,BOLA_H))
@@ -80,7 +80,7 @@ class Bola(pygame.sprite.Sprite):
             FEL = force*versor
             self.vel -= 0.12*FEL
 
-class Jogador(pygame.sprite.Sprite):
+class Jogador(pg.sprite.Sprite):
     def __init__(self,x,imagem,teclas):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(imagem, (PLAYER_W, PLAYER_H))
@@ -133,7 +133,7 @@ class Jogador(pygame.sprite.Sprite):
     def dash(self):
         self.vel.x = self.vel.x * 4
 
-class Campo(pygame.sprite.Sprite):
+class Campo(pg.sprite.Sprite):
     def __init__(self, x , y, w, h):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((w,h))
@@ -141,7 +141,6 @@ class Campo(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
 
 class Game:
 	def __init__(self):
@@ -192,19 +191,18 @@ class Game:
 
 		#Adicionando nos grupos de sprites
 		self.all_sprites.add(self.player1)
-	    self.all_sprites.add(self.player2)
-	    self.all_sprites.add(self.bola)
-	    self.all_sprites.add(self.campo_futebol)
-	    self.all_sprites.add(self.trave1)
-	    self.all_sprites.add(self.trave2)
-	    self.plataformas.add(self.campo_futebol)
-	    self.player2_group.add(self.player2)
-	    self.player1_group.add(self.player1)
-	    self.trave_1_group.add(self.trave1)
-	    self.trave_2_group.add(self.trave2)
-	    self.todos_jogadores.add(self.player1)
-	    self.todos_jogadores.add(self.player2)
-
+		self.all_sprites.add(self.player2)
+		self.all_sprites.add(self.bola)
+		self.all_sprites.add(self.campo_futebol)
+		self.all_sprites.add(self.trave1)
+		self.all_sprites.add(self.trave2)
+		self.plataformas.add(self.campo_futebol)
+		self.player2_group.add(self.player2)
+		self.player1_group.add(self.player1)
+		self.trave_1_group.add(self.trave1)
+		self.trave_2_group.add(self.trave2)
+		self.todos_jogadores.add(self.player1)
+		self.todos_jogadores.add(self.player2)
 
 	def run(self):
 		#Game loop
@@ -215,11 +213,25 @@ class Game:
 			self.update()
 			self.colision()
 			self.draw()
-			self.finish()
+			self.end_timer()
 
 	def update(self):
 		#Game loop update
 		self.all_sprites.update()
+
+	def end_timer(self):
+	    if self.timer2 >= 60:
+			if self.playing:
+				self.playing = False
+			self.running = False
+
+	def playMusicJ3():
+		pg.mixer.music.load(J3)
+	    pg.mixer.music.play(-1, 0.0)
+
+	def playMusicNaruto():
+	    pg.mixer.music.load(Naruto)
+	    pg.mixer.music.play(-1, 0.0)
 
 	def colosion(self):
 		#colisao dentro entre jogador campo
@@ -363,6 +375,13 @@ class Game:
 
 	    # *after* drawing everything, flip the display
 	    pg.display.flip()
+
+	def draw_text(surf, text, size, x, y):
+	    font = pg.font.Font(font_name, size)
+	    text_surface = font.render(text, True, WHITE)
+	    text_rect = text_surface.get_rect()
+	    text_rect.midtop = (x, y)
+	    surf.blit(text_surface, text_rect)
 
 	def show_start_screen(self):
 		#Game Start Screen

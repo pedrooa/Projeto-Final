@@ -35,6 +35,10 @@ player1_score = 0
 player2_score = 0
 timer = 0
 
+#Musicas
+Naruto = "Naruto.mp3"
+J3 = "J3.mp3"
+
 #carregando Imagens
 game_folder = path.dirname(__file__)
 img_folder = path.join(game_folder, "Imagens")
