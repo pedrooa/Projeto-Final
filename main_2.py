@@ -186,6 +186,14 @@ class Game:
 		self.trave_2 = pg.image.load(path.join(img_folder, \
 												"trave_2.png")).convert()
 
+        #Criando objetos
+        self.bola = Bola(WIDTH/2 ,HEIGHT/2,20)
+        self.player1 = Jogador(WIDTH*1/3,player1_img,0)
+        self.player2 = Jogador(WIDTH*2/3,player2_img,1)
+        self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
+        self.trave1 = Trave_1()
+        self.trave2 = Trave_2()
+
 		#Sprite Groups
 		self.all_sprites = pg.sprite.Group()
 		self.plataformas = pg.sprite.Group()
