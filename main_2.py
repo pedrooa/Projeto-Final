@@ -213,73 +213,70 @@ class Game:
 			self.update()
 			self.colision()
 			self.draw()
-			self.end_timer()
+			if self.timer2 >= 60:
+				if self.playing:
+					self.playing = False
+				self.running = False
 
 	def update(self):
 		#Game loop update
 		self.all_sprites.update()
 
-	def end_timer(self):
-	    if self.timer2 >= 60:
-			if self.playing:
-				self.playing = False
-			self.running = False
-
-	def playMusicJ3():
+	'''def playMusicJ3():
 		pg.mixer.music.load(J3)
-	    pg.mixer.music.play(-1, 0.0)
+	    pg.mixer.music.play(-1, 0.0)'''
 
-	def playMusicNaruto():
+	'''def playMusicNaruto():
 	    pg.mixer.music.load(Naruto)
-	    pg.mixer.music.play(-1, 0.0)
+	    pg.mixer.music.play(-1, 0.0)'''
 
 	def colosion(self):
 		#colisao dentro entre jogador campo
-	    bateu = pg.sprite.spritecollide(self.player1, self.plataformas, False)
-	    bateu_2 = pg.sprite.spritecollide(self.player2, self.plataformas, False)
+	    self.bateu = pg.sprite.spritecollide(self.player1, self.plataformas, False)
+	    self.bateu_2 = pg.sprite.spritecollide(self.player2, self.plataformas, False)
 
 	    #colisao entre players
-	    bateu_player1_2 = pg.sprite.spritecollide(self.player1, \
+	    self.bateu_player1_2 = pg.sprite.spritecollide(self.player1, \
 														self.player2_group, False)
-	    bateu_player2_1 = pg.sprite.spritecollide(self.player2, \
+	    self.bateu_player2_1 = pg.sprite.spritecollide(self.player2, \
 														self.player1_group, False)
-	    bateu_trave1 = pg.sprite.spritecollide(self.player1, \
+	    self.bateu_trave1 = pg.sprite.spritecollide(self.player1, \
 														self.trave_1_group, False)
-	    bateu_trave2 = pg.sprite.spritecollide(self.player2, \
+	    self.bateu_trave2 = pg.sprite.spritecollide(self.player2, \
 														self.trave_2_group, False)
-	    bateu_bola_trave_1 = pg.sprite.spritecollide(self.bola, \
+	    self.bateu_bola_trave_1 = pg.sprite.spritecollide(self.bola, \
 														self.trave_1_group, False)
-	    bateu_bola_trave_2 = pg.sprite.spritecollide(self.bola, \
+	    self.bateu_bola_trave_2 = pg.sprite.spritecollide(self.bola, \
 														self.trave_2_group, False)
 
 		#Se bater player1 com plataforma
-		if bateu:
-	        self.player1.pos.y = bateu[0].rect.top + 1
-	        self.player1.vel.y = 0
+		if self.bateu:
+			self.player1.pos.y = self.bateu[0].rect.top + 1
+			self.player1.vel.y = 0
 
 		#Se bater player2 com plataforma
-	    if bateu_2:
-	        self.player2.pos.y = bateu_2[0].rect.top + 1
+		if self.bateu_2:
+	        self.player2.pos.y = self.bateu_2[0].rect.top + 1
 	        self.player2.vel.y = 0
 
 		#Se bater player 2/1 com player 1/2
-	    if bateu_player1_2 and bateu_player2_1:
+	    if self.bateu_player1_2 and self.bateu_player2_1:
 	        self.player1.vel.x = 0
 	        self.player2.vel.x = 0
 	        self.player1.acc.x = 0
 	        self.player2.acc.x = 0
 	        if self.player1.pos.x < self.player2.pos.x:
-	            self.player2.pos.x  = bateu_player1_2[0].rect.left + 28
-	            self.player1.pos.x  = bateu_player2_1[0].rect.right - 28
+	            self.player2.pos.x  = self.bateu_player1_2[0].rect.left + 28
+	            self.player1.pos.x  = self.bateu_player2_1[0].rect.right - 28
 	        elif self.player1.pos.x < self.player2.pos.x:
-	            self.player2.pos.x  = bateu_player1_2[0].rect.right - 40
-	            self.player1.pos.x  = bateu_player2_1[0].rect.left + 40
+	            self.player2.pos.x  = self.bateu_player1_2[0].rect.right - 40
+	            self.player1.pos.x  = self.bateu_player2_1[0].rect.left + 40
 	        if self.player1.pos.y < self.player2.pos.y:
 	            self.player1.pos.y = self.player2.rect.top + 2
 	            self.player1.vel.y = 0
 
 		#Se bater na trave - player1
-	    if bateu_trave1:
+	    if self.bateu_trave1:
 	        if self.player1.pos.y -  10 <= self.trave1.rect.top \
 									and self.player1.vel.y  >  0:
 	            self.player1.pos.y = self.trave1.rect.top + 2
@@ -289,7 +286,7 @@ class Game:
 	            self.player1.vel.y = 5
 
 		#Se bater na trave - player2
-		if bateu_trave2:
+		if self.bateu_trave2:
 	        if self.player2.pos.y -  10 <= self.trave2.rect.top \
 									and self.player2.vel.y  > 0:
 	            self.player2.pos.y = self.trave2.rect.top + 2
@@ -297,7 +294,7 @@ class Game:
 	        if self.player2.pos.y - 60 <= self.trave2.rect.top:
 	            self.player2.vel.y = 0
 	            self.player2.vel.y = 5
-	    if bateu_bola_trave_1:
+	    if self.bateu_bola_trave_1:
 	        if self.bola.pos.y <= self.trave1.rect.top and self.bola.vel.y > 0:
 	            bola.vel.y = -bola.vel.y
 	        if self.bola.pos.y - self.bola.radius >= self.trave1.rect.top:
@@ -317,7 +314,7 @@ class Game:
 	                self.player2.vel.y = 0
 	                self.timer = 0
 
-	    if bateu_bola_trave_2:
+	    if self.bateu_bola_trave_2:
 	        if self.bola.pos.y <= self.trave2.rect.top and self.bola.vel.y > 0:
 	            self.bola.vel.y = -self.bola.vel.y
 	        if self.bola.pos.y - self.bola.radius >= self.trave2.rect.top:
@@ -337,9 +334,9 @@ class Game:
 	                self.player2.vel.y = 0
 	                self.timer = 0
 	    #Colisao da bola com os jogadores
-	    colisao = pg.sprite.spritecollide(self.bola,self.todos_jogadores,\
+	    self.colisao = pg.sprite.spritecollide(self.bola,self.todos_jogadores,\
 										False,pg.sprite.collide_circle)
-	    if colisao:
+	    if self.colisao:
 	        self.bola.collide(colisao[0])
 
 	def events(self):
