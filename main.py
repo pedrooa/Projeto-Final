@@ -41,7 +41,7 @@ def mensagem_na_tela(msg,cor):
     tela.blit(tela_mensagem, [tela_x/2 - 30, tela_y/2])
 
 class Jogador(pygame.sprite.Sprite):
-    
+
     def __init__(self,x,cor,teclas):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((50,40))
@@ -51,7 +51,7 @@ class Jogador(pygame.sprite.Sprite):
         self.rect.bottom = tela_y - 20
         self.pos = vec(x,self.rect.centery)
         self.vel = vec(0,0)
-        self.acc = vec(0,0)  
+        self.acc = vec(0,0)
         self.teclas = teclas
 
     def jump(self):
@@ -72,9 +72,9 @@ class Jogador(pygame.sprite.Sprite):
                 self.acc.x = -acc_jogador
             if keystate[pygame.K_d]:
                 self.acc.x = acc_jogador
-            
-        
-        
+
+
+
         #adiciona atrito
         self.acc.x += self.vel.x * atrito_jogador
         #equacoes do movimento
@@ -128,7 +128,7 @@ def jogo_loop():
 
 
     while not sair:
-        
+
         #Roda em x FPS
         relogio.tick(FPS)
 
@@ -144,7 +144,7 @@ def jogo_loop():
                         gameover = False
                     elif event.key == pygame.K_C:
                         jogo_loop()
-        
+
         for event in pygame.event.get():
             #checa se fechou a tela
             if event.type == pygame.QUIT:
@@ -164,7 +164,7 @@ def jogo_loop():
         if hits:
             jogador1.pos.y= hits[0].rect.top + 1
             jogador1.vel.y = 0
-        
+
         hits = pygame.sprite.spritecollide(jogador2, todas_plataformas, False)
         if hits:
             jogador2.pos.y= hits[0].rect.top + 1

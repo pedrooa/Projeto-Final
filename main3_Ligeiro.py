@@ -259,11 +259,11 @@ while running:
                 player2.dash()
     # Update
     all_sprites.update()
-    
+
     #colisao dentro entre jogador campo
     bateu = pygame.sprite.spritecollide(player1, plataformas, False)
     bateu_2 = pygame.sprite.spritecollide(player2, plataformas, False)
-    
+
     #colisao entre players
     bateu_player1_2 = pygame.sprite.spritecollide(player1, player2_group, False)
     bateu_player2_1 = pygame.sprite.spritecollide(player2, player1_group, False)
@@ -294,7 +294,7 @@ while running:
         if player1.pos.y < player2.pos.y:
             player1.pos.y = player2.rect.top + 2
             player1.vel.y = 0
-            
+
     if bateu_trave1:
         if player1.pos.y -  10 <= trave1.rect.top and player1.vel.y  > 0:
             player1.pos.y = trave1.rect.top + 2
@@ -355,7 +355,7 @@ while running:
         bola.collide(colisao[0])
     #timer do score
     timer2 = pygame.time.get_ticks()/1000
-    #musica 
+    #musica
  #   playMusicNaruto()
     # Draw / render
     screen.fill(BLACK)
