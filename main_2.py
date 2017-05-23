@@ -167,18 +167,24 @@ class Game:
 		self.player1_score = 0
 		self.player2_score = 0
 		self.timer = 0
-		self.timer2 = pygame.time.get_ticks()/1000
+		self.timer2 = pg.time.get_ticks()/1000
 
 		#carregando Imagens
 		game_folder = path.dirname(__file__)
 		img_folder = path.join(game_folder, "Imagens")
-		self.background = pygame.image.load(path.join(img_folder, 'background2.jpeg')).convert()
+		self.background = pg.image.load(path.join(img_folder, \
+												'background2.jpeg')).convert()
 		background_rect = self.background.get_rect()
-		self.player1_img = pygame.image.load(path.join(img_folder, "cabeca1.png")).convert()
-		self.player2_img = pygame.image.load(path.join(img_folder, "cabeca2.png")).convert()
-		self.SoccerBall = pygame.image.load(path.join(img_folder, "SoccerBall.png")).convert()
-		self.trave_1 = pygame.image.load(path.join(img_folder, "trave_1.png")).convert()
-		self.trave_2 = pygame.image.load(path.join(img_folder, "trave_2.png")).convert()
+		self.player1_img = pg.image.load(path.join(img_folder, \
+												"cabeca1.png")).convert()
+		self.player2_img = pg.image.load(path.join(img_folder, \
+												"cabeca2.png")).convert()
+		self.SoccerBall = pg.image.load(path.join(img_folder, \
+												"SoccerBall.png")).convert()
+		self.trave_1 = pg.image.load(path.join(img_folder, \
+												"trave_1.png")).convert()
+		self.trave_2 = pg.image.load(path.join(img_folder, \
+												"trave_2.png")).convert()
 
 		#Sprite Groups
 		self.all_sprites = pg.sprite.Group()
