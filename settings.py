@@ -11,7 +11,7 @@ PLAYER_H = 50
 PLAYER_RAIO = 24
 WIDTH = 876
 HEIGHT = 573
-FPS = 40
+FPS = 50
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

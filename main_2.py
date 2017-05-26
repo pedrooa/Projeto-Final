@@ -5,8 +5,12 @@ from settings import *
 
 class Trave_1(pg.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(trave_1, (TRAVE_W,TRAVE_H))
+        pg.sprite.Sprite.__init__(self)
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, "Imagens")
+        self.trave_1 = pg.image.load(path.join(self.img_folder, \
+                                                "trave_1.png")).convert()
+        self.image = pg.transform.scale(self.trave_1, (TRAVE_W,TRAVE_H))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
         self.rect.x = 2
@@ -14,18 +18,25 @@ class Trave_1(pg.sprite.Sprite):
 
 class Trave_2(pg.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(trave_2, (TRAVE_W,TRAVE_H))
+        pg.sprite.Sprite.__init__(self)
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, "Imagens")
+        self.trave_2 = pg.image.load(path.join(self.img_folder, \
+                                                "trave_2.png")).convert()
+        self.image = pg.transform.scale(self.trave_2, (TRAVE_W,TRAVE_H))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
-
         self.rect.x = WIDTH - 60
         self.rect.y = HEIGHT - 145
 
 class Bola(pg.sprite.Sprite):
     def __init__(self,x,y,raio):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(SoccerBall, (BOLA_W,BOLA_H))
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, "Imagens")
+        self.SoccerBall = pg.image.load(path.join(self.img_folder, \
+                                                "SoccerBall.png")).convert()
+        self.image = pg.transform.scale(self.SoccerBall, (BOLA_W,BOLA_H))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
         self.radius = int(raio)
@@ -34,7 +45,7 @@ class Bola(pg.sprite.Sprite):
         self.pos = vetor(x,self.rect.centery)
         self.vel = vetor(0,0)
         self.acc = vetor(0,0)
-        self.mask = pygame.mask.from_surface(self.image)
+        self.mask = pg.mask.from_surface(self.image)
 
     def update(self):
         self.acc = vetor(0,0.4)
@@ -83,7 +94,11 @@ class Bola(pg.sprite.Sprite):
 class Jogador(pg.sprite.Sprite):
     def __init__(self,x,imagem,teclas):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(imagem, (PLAYER_W, PLAYER_H))
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, "Imagens")
+        self.player1_img = pg.image.load(path.join(self.img_folder, \
+                                                "cabeca1.png")).convert()
+        self.image = pg.transform.scale(imagem, (PLAYER_W, PLAYER_H))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.radius = PLAYER_RAIO
@@ -93,28 +108,29 @@ class Jogador(pg.sprite.Sprite):
         self.vel = vetor(0, 0)
         self.acc = vetor(0, 0)
         self.teclas = teclas
-        self.mask = pygame.mask.from_surface(self.image)
+        self.mask = pg.mask.from_surface(self.image)
 
     def jump(self):
         self.rect.y += 1
-        hits = pygame.sprite.spritecollide(self, plataformas, False)
+        plataformas 
+        hits = pg.sprite.spritecollide(self, plataformas, False)
         self.rect.y -= 1
         if hits:
             self.vel.y = -15
 
     def update(self):
         self.acc = vetor(0, gravidade)
-        keystate = pygame.key.get_pressed()
+        keystate = pg.key.get_pressed()
         if self.teclas == 0:
-            if keystate[pygame.K_a]:
+            if keystate[pg.K_a]:
                 self.acc.x = -aceleração_maxima
-            if keystate[pygame.K_d]:
+            if keystate[pg.K_d]:
                 self.acc.x = aceleração_maxima
         elif self.teclas ==1:
 
-            if keystate[pygame.K_LEFT]:
+            if keystate[pg.K_LEFT]:
                 self.acc.x = -aceleração_maxima
-            if keystate[pygame.K_RIGHT]:
+            if keystate[pg.K_RIGHT]:
                 self.acc.x = aceleração_maxima
 
        #aplicando atrito
@@ -131,7 +147,12 @@ class Jogador(pg.sprite.Sprite):
         self.rect.midbottom = self.pos
 
     def dash(self):
-        self.vel.x = self.vel.x * 4
+        self.vari = True
+        self.timer3 = pg.time.get_ticks()/1000
+        while timer3 <= 5:
+            if self.vari:
+                self.vel.x = self.vel.x * 4
+                self.vari = False
 
 class Campo(pg.sprite.Sprite):
     def __init__(self, x , y, w, h):
@@ -155,8 +176,14 @@ class Game:
 
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,20)
-        self.player1 = Jogador(WIDTH*1/3,player1_img,0)
-        self.player2 = Jogador(WIDTH*2/3,player2_img,1)
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, "Imagens")
+        self.player1_img = pg.image.load(path.join(self.img_folder, \
+                                                "cabeca1.png")).convert()
+        self.player2_img = pg.image.load(path.join(self.img_folder, \
+                                                "cabeca2.png")).convert()
+        self.player1 = Jogador(WIDTH*1/3,self.player1_img,0)
+        self.player2 = Jogador(WIDTH*2/3,self.player2_img,1)
         self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
         self.trave1 = Trave_1()
         self.trave2 = Trave_2()
@@ -169,27 +196,28 @@ class Game:
         self.timer = 0
         self.timer2 = pg.time.get_ticks()/1000
         
+        self.run()
+
+    def sprites(self):
         #carregando Imagens
-        game_folder = path.dirname(__file__)
-        img_folder = path.join(game_folder, "Imagens")
-        self.background = pg.image.load(path.join(img_folder, \
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, "Imagens")
+        self.background = pg.image.load(path.join(self.img_folder, \
                                                 'background2.jpeg')).convert()
-        background_rect = self.background.get_rect()
-        self.player1_img = pg.image.load(path.join(img_folder, \
+        self.background_rect = self.background.get_rect()
+        self.player1_img = pg.image.load(path.join(self.img_folder, \
                                                 "cabeca1.png")).convert()
-        self.player2_img = pg.image.load(path.join(img_folder, \
+        self.player2_img = pg.image.load(path.join(self.img_folder, \
                                                 "cabeca2.png")).convert()
-        self.SoccerBall = pg.image.load(path.join(img_folder, \
-                                                "SoccerBall.png")).convert()
-        self.trave_1 = pg.image.load(path.join(img_folder, \
+        self.trave_1 = pg.image.load(path.join(self.img_folder, \
                                                 "trave_1.png")).convert()
-        self.trave_2 = pg.image.load(path.join(img_folder, \
+        self.trave_2 = pg.image.load(path.join(self.img_folder, \
                                                 "trave_2.png")).convert()
 
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,20)
-        self.player1 = Jogador(WIDTH*1/3,player1_img,0)
-        self.player2 = Jogador(WIDTH*2/3,player2_img,1)
+        self.player1 = Jogador(WIDTH*1/3,self.player1_img,0)
+        self.player2 = Jogador(WIDTH*2/3,self.player2_img,1)
         self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
         self.trave1 = Trave_1()
         self.trave2 = Trave_2()
@@ -218,7 +246,6 @@ class Game:
         self.todos_jogadores.add(self.player1)
         self.todos_jogadores.add(self.player2)
 
-        self.run()
 
     def run(self):
         #Game loop
@@ -246,7 +273,7 @@ class Game:
         pg.mixer.music.load(Naruto)
         pg.mixer.music.play(-1, 0.0)'''
 
-    def colosion(self):
+    def colision(self):
         #Colisao dentro entre jogador campo
         self.bateu = pg.sprite.spritecollide(self.player1, self.plataformas,\
                                                         False)
@@ -358,6 +385,7 @@ class Game:
             self.bola.collide(colisao[0])
 
     def events(self):
+        self.sprites()
         #Game loop events
         for event in pg.event.get():
             # check for closing window
@@ -378,25 +406,26 @@ class Game:
     def draw(self):
         #Game loop draw
         # Draw / render
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.screen.fill(BLACK)
-        self.screen.blit(self.background, background_rect)
+        self.screen.blit(self.background, self.background_rect)
         # Info and flip screen
         self.screen.blit(self.font.render("fps: " + str(self.clock.get_fps()), 1, WHITE), (0,0))
-        draw_text(screen,":", 40, WIDTH/2 - 20, 10)
-        draw_text(screen,str(self.player1_score), 40, WIDTH/2 - 50, 10)
-        draw_text(screen,str(self.player2_score), 40, WIDTH/2 + 10, 10)
-        draw_text(screen,str(round(self.timer2,1)), 40, WIDTH*5/6, 10)
-        self.all_sprites.draw(screen) #rodando os sprites
+        #self.draw_text(self.screen,":", 40, WIDTH/2 - 20, 10)
+        #self.draw_text(self.screen,str(self.player1_score), 40, WIDTH/2 - 50, 10)
+        #self.draw_text(self.screen,str(self.player2_score), 40, WIDTH/2 + 10, 10)
+        #self.draw_text(self.screen,str(round(self.timer2,1)), 40, WIDTH*5/6, 10)
+        self.all_sprites.draw(self.screen) #rodando os sprites
 
         # *after* drawing everything, flip the display
         pg.display.flip()
 
     def draw_text(surf, text, size, x, y):
-        font = pg.font.Font(font_name, size)
-        text_surface = font.render(text, True, WHITE)
-        text_rect = text_surface.get_rect()
-        text_rect.midtop = (x, y)
-        surf.blit(text_surface, text_rect)
+        self.font = pg.font.Font(font_name, size)
+        self.text_surface = self.font.render(text, True, WHITE)
+        self.text_rect = self.text_surface.get_rect()
+        self.text_rect.midtop = (x, y)
+        surf.blit(self.text_surface, self.text_rect)
 
     def show_start_screen(self):
         #Game Start Screen

@@ -6,7 +6,7 @@ vetor = pygame.math.Vector2
 
 WIDTH = 876
 HEIGHT = 573
-FPS = 40
+FPS = 47
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
