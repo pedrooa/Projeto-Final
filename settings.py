@@ -1,7 +1,7 @@
-import pygame
+import pygame as pg
 
 #game settings
-vetor = pygame.math.Vector2
+vetor = pg.math.Vector2
 TRAVE_W = 60
 TRAVE_H = 120
 BOLA_W = 34
@@ -11,7 +11,7 @@ PLAYER_H = 50
 PLAYER_RAIO = 24
 WIDTH = 876
 HEIGHT = 573
-FPS = 50
+FPS = 40
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
