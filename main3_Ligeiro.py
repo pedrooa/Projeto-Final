@@ -41,7 +41,6 @@ class Trave_2(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(trave_2, (60,120))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
-
         self.rect.x = WIDTH - 60
         self.rect.y = HEIGHT - 145
 
@@ -65,7 +64,6 @@ class Bola(pygame.sprite.Sprite):
         self.vel*= arrasto
         self.vel += self.acc
         self.pos += self.vel
-
         self.rect.center = self.pos
 
     #Bola quica na tela
@@ -112,7 +110,7 @@ class Jogador(pygame.sprite.Sprite):
         self.radius = 24
        #pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.center = (x, HEIGHT - 50)
-        self.pos = vetor(x, self.rect.centery)
+        self.pos = vetor(x, self.rect.centery )
         self.vel = vetor(0, 0)
         self.acc = vetor(0, 0)
         self.teclas = teclas
@@ -154,15 +152,23 @@ class Jogador(pygame.sprite.Sprite):
         self.rect.midbottom = self.pos
 
     def dash(self):
+        dash = True
+        timer3 = pygame.time.get_ticks()/1000
+        vel = self.vel.x
         self.vel.x = self.vel.x * 4
-
+        while dash:
+            if timer3 >= 10:
+                self.vel.x = vel
+                dash = False
 
 class Campo(pygame.sprite.Sprite):
     def __init__(self, x , y, w, h):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((w,h))
-        self.image.fill(GREEN)
+        self.image = pygame.transform.scale(grass, (WIDTH,70))
+        self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
+        #self.image = pygame.Surface((w,h))
+        #self.image.fill(GREEN)
         self.rect.x = x
         self.rect.y = y
 #funções
@@ -201,6 +207,7 @@ background_rect = background.get_rect()
 player1_img = pygame.image.load(path.join(img_folder, "cabeca1.png")).convert()
 player2_img = pygame.image.load(path.join(img_folder, "cabeca2.png")).convert()
 SoccerBall = pygame.image.load(path.join(img_folder, "SoccerBall.png")).convert()
+grass = pygame.image.load(path.join(img_folder, "grass.png")).convert()
 
 trave_1 = pygame.image.load(path.join(img_folder, "trave_1.png")).convert()
 trave_2 = pygame.image.load(path.join(img_folder, "trave_2.png")).convert()
@@ -216,13 +223,9 @@ trave_2_group = pygame.sprite.Group()
 bola = Bola(WIDTH/2 ,HEIGHT/2,20)
 player1 = Jogador(WIDTH*1/3,player1_img,0)
 player2 = Jogador(WIDTH*2/3,player2_img,1)
-
-
-
 trave1 = Trave_1()
 trave2 = Trave_2()
-
-campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
+campo_futebol = Campo(0,HEIGHT - 55, WIDTH,30)
 
 all_sprites.add(player1) #ADD Sprites
 all_sprites.add(player2)
@@ -272,11 +275,11 @@ while running:
     bateu_bola_trave_1 = pygame.sprite.spritecollide(bola, trave_1_group, False)
     bateu_bola_trave_2 = pygame.sprite.spritecollide(bola, trave_2_group, False)
     if bateu:
-        player1.pos.y = bateu[0].rect.top + 1
+        player1.pos.y = bateu[0].rect.top + 20
         player1.vel.y = 0
 
     if bateu_2:
-        player2.pos.y = bateu_2[0].rect.top + 1
+        player2.pos.y = bateu_2[0].rect.top + 20
         player2.vel.y = 0
 
     if bateu_player1_2 and bateu_player2_1:
