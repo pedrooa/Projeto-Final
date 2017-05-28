@@ -42,6 +42,8 @@ class Game:
                                                 "trave_1.png")).convert()
         self.trave_2 = pg.image.load(path.join(img_folder, \
                                                 "trave_2.png")).convert()
+        self.sombra_bola = pg.image.load(path.join(img_folder, \
+                                                "ball_shadow.png")).convert()
 
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,20,self.SoccerBall)
@@ -50,6 +52,7 @@ class Game:
         self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
         self.trave1 = Trave(self.trave_1,2,HEIGHT - 145)
         self.trave2 = Trave(self.trave_2,WIDTH - 60, HEIGHT - 145)
+        self.sombra = Sombra(self,self.sombra_bola)
 
         #Sprite Groups
         self.all_sprites = pg.sprite.Group()
@@ -74,6 +77,7 @@ class Game:
         self.trave_2_group.add(self.trave2)
         self.todos_jogadores.add(self.player1)
         self.todos_jogadores.add(self.player2)
+        self.all_sprites.add(self.sombra)
 
         self.run()
 
