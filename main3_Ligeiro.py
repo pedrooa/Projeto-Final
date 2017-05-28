@@ -359,7 +359,7 @@ while running:
     #timer do score
     timer2 = pygame.time.get_ticks()/1000
     #musica
- #   playMusicNaruto()
+    #playMusicNaruto()
     # Draw / render
     screen.fill(BLACK)
     screen.blit(background, background_rect)
@@ -370,7 +370,6 @@ while running:
     draw_text(screen,str(player2_score), 40, WIDTH/2 + 10, 10)
     draw_text(screen,str(round(timer2,1)), 40, WIDTH*5/6, 10)
     all_sprites.draw(screen) #rodando os sprites
-    #pygame.draw.rect(screen, GREEN, [0,HEIGHT - 30,WIDTH,30])
     # *after* drawing everything, flip the display
     pygame.display.flip()
     if timer2 >= 60:

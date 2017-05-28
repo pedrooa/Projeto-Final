@@ -33,7 +33,6 @@ class Bola(pg.sprite.Sprite):
         self.vel*= arrasto
         self.vel += self.acc
         self.pos += self.vel
-
         self.rect.center = self.pos
 
     #Bola quica na tela
