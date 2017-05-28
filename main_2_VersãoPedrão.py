@@ -140,15 +140,22 @@ class Game:
             self.player2.vel.x = 0
             self.player1.acc.x = 0
             self.player2.acc.x = 0
-            if self.player1.pos.x < self.player2.pos.x:
-                self.player2.pos.x  = self.bateu_player1_2[0].rect.left + 28
-                self.player1.pos.x  = self.bateu_player2_1[0].rect.right - 28
-            elif self.player1.pos.x < self.player2.pos.x:
-                self.player2.pos.x  = self.bateu_player1_2[0].rect.right - 40
-                self.player1.pos.x  = self.bateu_player2_1[0].rect.left + 40
-            if self.player1.pos.y < self.player2.pos.y:
-                self.player1.pos.y = self.player2.rect.top + 2
-                self.player1.vel.y = 0
+            """self.player1.vel.y = 0
+            self.player2.vel.y = 0
+            self.player1.acc.y = 0
+            self.player2.acc.y = 0"""
+
+            dx = self.player1.rect.centerx - self.player2.rect.centerx
+            dy = self.player2.rect.centery - self.player2.rect.centery
+
+            dist = math.hypot(dx,dy)
+
+            soma_raios = self.player1.radius + self.player2.radius
+            v = vetor(self.player1.rect.centerx - self.player2.rect.centerx,self.player2.rect.centery - self.player2.rect.centery)
+            v_metade = v*0.05
+
+            self.player1.pos += v_metade
+            self.player2.pos -= v_metade
 
         #Se bater na trave - player1
         if self.bateu_trave1:
