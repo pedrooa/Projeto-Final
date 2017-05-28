@@ -44,12 +44,13 @@ class Game:
                                                 "trave_2.png")).convert()
         self.sombra_bola = pg.image.load(path.join(img_folder, \
                                                 "ball_shadow.png")).convert()
-
+        self.grass_2 = pg.image.load(path.join(img_folder, \
+                                                "grass_2.png")).convert()
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,20,self.SoccerBall)
         self.player1 = Jogador(self,WIDTH*1/3,self.player1_img,0)
         self.player2 = Jogador(self,WIDTH*2/3,self.player2_img,1)
-        self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
+        self.campo_futebol = Campo(0,HEIGHT - 30,self.grass_2,WIDTH,30)
         self.trave1 = Trave(self.trave_1,2,HEIGHT - 145)
         self.trave2 = Trave(self.trave_2,WIDTH - 60, HEIGHT - 145)
         self.sombra = Sombra(self,self.sombra_bola)
