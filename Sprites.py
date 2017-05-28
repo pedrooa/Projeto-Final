@@ -16,8 +16,9 @@ class Trave(pg.sprite.Sprite):
 class Bola(pg.sprite.Sprite):
     def __init__(self,x,y,raio,imagem):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.transform.scale(imagem, (BOLA_W,BOLA_H))
-        self.image.set_colorkey(RED)
+        self.image_orig = pg.transform.scale(imagem, (BOLA_W,BOLA_H))
+        self.image_orig.set_colorkey(RED)
+        self.image = self.image_orig.copy()
         self.rect = self.image.get_rect()
         self.radius = int(raio)
         self.rect.centerx = x
@@ -25,15 +26,17 @@ class Bola(pg.sprite.Sprite):
         self.pos = vetor(x,self.rect.centery)
         self.vel = vetor(0,0)
         self.acc = vetor(0,0)
+        self.rot = 0
+        self.last_update = pg.time.get_ticks()
         self.mask = pg.mask.from_surface(self.image)
 
     def update(self):
         self.acc = vetor(0,0.4)
         self.quicar()
+        self.rotate()
         self.vel*= arrasto
         self.vel += self.acc
         self.pos += self.vel
-
         self.rect.center = self.pos
 
     #Bola quica na tela
@@ -65,11 +68,35 @@ class Bola(pg.sprite.Sprite):
         dist = math.hypot(dx,dy)
         soma_raios = self.radius + other.radius
         if dist < soma_raios:
-            force = 3*(soma_raios - dist)
+            force = 6*(soma_raios - dist)
             v = vetor(other.rect.x-self.rect.x,other.rect.y-self.rect.y)
             versor = v/dist
             FEL = force*versor
             self.vel -= 0.12*FEL
+
+    def rotate(self):
+        now = pg.time.get_ticks()
+        if self.vel.x > 1 :
+            self.rot_speed = -5
+            if now - self.last_update > 50:
+                self.last_update = now
+                self.rot = (self.rot + self.rot_speed)%360
+                new_image = pg.transform.rotate(self.image_orig,self.rot)
+                old_center = self.rect.center
+                self.image = new_image
+                self.rect  = self.image.get_rect()
+                self.rect_center = old_center
+        elif self.vel.x < -1 :
+            self.rot_speed = 5
+            if now - self.last_update > 50:
+                self.last_update = now
+                self.rot = (self.rot + self.rot_speed)%360
+                new_image = pg.transform.rotate(self.image_orig,self.rot)
+                old_center = self.rect.center
+                self.image = new_image
+                self.rect  = self.image.get_rect()
+                self.rect_center = old_center
+
 
 class Jogador(pg.sprite.Sprite):
     def __init__(self,game,x,imagem,teclas):
@@ -134,3 +161,17 @@ class Campo(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+class Sombra(pg.sprite.Sprite):
+    def __init__ (self,game,imagem):
+        pg.sprite.Sprite.__init__(self)
+        #self.image = pg.transform.scale(imagem,(100,100))
+        #self.image.set_colorkey(WHITE)
+        self.image = pg.image.load("Imagens/ball_shadow.png")
+        self.rect = self.image.get_rect()
+        self.rect.y = HEIGHT-63
+        self.rect.x = WIDTH/2
+        self.game = game
+
+    def update(self):
+        self.rect.x = self.game.bola.rect.x - 6
