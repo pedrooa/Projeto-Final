@@ -93,7 +93,7 @@ class Jogador(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, self.game.plataformas, False)
         self.rect.y -= 1
         if hits:
-            self.vel.y = -15
+            self.vel.y = -12
 
     def update(self):
         self.acc = vetor(0, gravidade)
