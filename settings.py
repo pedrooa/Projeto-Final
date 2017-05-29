@@ -4,6 +4,10 @@ import pygame as pg
 vetor = pg.math.Vector2
 TRAVE_W = 60
 TRAVE_H = 120
+TRAVE_H_maior = 200
+TRAVE_H_menor = 80
+
+
 BOLA_W = 34
 BOLA_H = 34
 PLAYER_W = 50
@@ -30,6 +34,8 @@ elasticidade = 0.75
 gravidade_bola = 0.2
 atrito_bola = - 0.10
 
+#powerups
+POWERUP_TIME = 10000
 #SCORE
 player1_score = 0
 player2_score = 0

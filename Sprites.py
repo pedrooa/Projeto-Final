@@ -6,36 +6,52 @@ vetor = pg.math.Vector2
 
 
 class Trave(pg.sprite.Sprite):
-    def __init__(self,imagem,x,y,game):
+    def __init__(self,traves,x,y,game):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.transform.scale(imagem, (TRAVE_W,TRAVE_H))
+        self.traves = traves
+        self.image = pg.transform.scale(self.traves[0], (TRAVE_W,TRAVE_H))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
         self.game = game
+        self.x = x
+        self.y = y
         self.rect.x = x
         self.rect.y = y
         self.power = 1
         self.power_time = pg.time.get_ticks()
 
+
     def update(self):
         #Encerrar o powerup
-        if self.power ==2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
-            self.power -= 1
+        if self.power >= 2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+            self.power = 1
             self.power_time = pg.time.get_ticks()
+        self.golmaior()
 
     def golmaior(self):
-        now = pg.time.get_ticks()
+        if self.power == 0:
+            self.image = pg.transform.scale(self.traves[2], (TRAVE_W,TRAVE_H_menor))
+            self.image.set_colorkey(RED)
+            self.rect = self.image.get_rect()
+            self.rect.x = self.x
+            self.rect.y = self.y +40
         if self.power == 1:
-            self.image = pg.transform.scale(imagem, (TRAVE_W,TRAVE_H))
+            self.image = pg.transform.scale(self.traves[0], (TRAVE_W,TRAVE_H))
             self.image.set_colorkey(RED)
             self.rect = self.image.get_rect()
+            self.rect.x = self.x
+            self.rect.y = self.y
         if self.power == 2:
-            self.image = pg.image.load(self.game.traves1[1])
+            self.image = pg.transform.scale(self.traves[1], (TRAVE_W,TRAVE_H_maior))
             self.image.set_colorkey(RED)
             self.rect = self.image.get_rect()
-
-    def powerup(self):
+            self.rect.x = self.x
+            self.rect.y = self.y - 80
+    def powerup_1(self):
         self.power+=1
+        self.power_time = pg.time.get_ticks()
+    def powerup_2(self):
+        self.power -=1
         self.power_time = pg.time.get_ticks()
 
 class Bola(pg.sprite.Sprite):
@@ -204,7 +220,7 @@ class Powerup(pg.sprite.Sprite):
     def __init__(self,game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        self.type = random.choice(['velocidade','crescer','diminuir'])
+        self.type = random.choice(['crescer','diminuir'])
         self.image = self.game.powerup_images[self.type]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()

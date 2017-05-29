@@ -41,7 +41,6 @@ class Game:
         self.sombra_bola = pg.image.load(path.join(img_folder, \
                                                 "ball_shadow.png")).convert()
 
-
         self.traves1 = []
         self.traves1_lista = ['trave_1.png','Trave_1_grande.png','Trave_1_pequena.png']
         for img in self.traves1_lista :
@@ -64,8 +63,8 @@ class Game:
         self.player1 = Jogador(self,WIDTH*1/3,self.player1_img,0)
         self.player2 = Jogador(self,WIDTH*2/3,self.player2_img,1)
         self.campo_futebol = Campo(0,HEIGHT - 30,self.grass_2,WIDTH,30)
-        self.trave1 = Trave(self.traves1[0],2,HEIGHT - 145,self)
-        self.trave2 = Trave(self.traves2[0],WIDTH - 60, HEIGHT - 145,self)
+        self.trave1 = Trave(self.traves1,2,HEIGHT - 145,self)
+        self.trave2 = Trave(self.traves2,WIDTH - 60, HEIGHT - 145,self)
         self.sombra = Sombra(self,self.sombra_bola)
 
         #Sprite Groups
@@ -122,6 +121,7 @@ class Game:
             self.poweruptime = now
             poder = Powerup(self)
             self.all_sprites.add(poder)
+            self.powerups.add(poder)
 
 
 
@@ -251,10 +251,21 @@ class Game:
         if self.colisao:
             self.bola.collide(self.colisao[0])
 
-        #Checa se o jogador pegou um powerup
-        hits = pg.sprite.spritecollide(self.player1,self.powerups,True)
-        for hit in hits:
-            pass
+        #Checa se o jogador1 pegou um powerup
+        self.hits = pg.sprite.spritecollide(self.player1,self.powerups,True)
+        for hit in self.hits:
+            if hit.type == 'crescer':
+                self.trave2.powerup_1()
+            if hit.type == 'diminuir':
+                self.trave2.powerup_2()
+
+        #Checa se o jogador2 pegou um powerup
+        self.hits = pg.sprite.spritecollide(self.player2,self.powerups,True)
+        for hit in self.hits:
+            if hit.type == 'crescer':
+                self.trave1.powerup_1()
+            if hit.type == 'diminuir':
+                self.trave1.powerup_2()
 
     def events(self):
         #Game loop events
