@@ -1,17 +1,42 @@
 import pygame as pg
 import math
+import random
 from settings import *
 vetor = pg.math.Vector2
 
 
 class Trave(pg.sprite.Sprite):
-    def __init__(self,imagem,x,y):
+    def __init__(self,imagem,x,y,game):
         pg.sprite.Sprite.__init__(self)
         self.image = pg.transform.scale(imagem, (TRAVE_W,TRAVE_H))
         self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
+        self.game = game
         self.rect.x = x
         self.rect.y = y
+        self.power = 1
+        self.power_time = pg.time.get_ticks()
+
+    def update(self):
+        #Encerrar o powerup
+        if self.power ==2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+            self.power -= 1
+            self.power_time = pg.time.get_ticks()
+
+    def golmaior(self):
+        now = pg.time.get_ticks()
+        if self.power == 1:
+            self.image = pg.transform.scale(imagem, (TRAVE_W,TRAVE_H))
+            self.image.set_colorkey(RED)
+            self.rect = self.image.get_rect()
+        if self.power == 2:
+            self.image = pg.image.load(self.game.traves1[1])
+            self.image.set_colorkey(RED)
+            self.rect = self.image.get_rect()
+
+    def powerup(self):
+        self.power+=1
+        self.power_time = pg.time.get_ticks()
 
 class Bola(pg.sprite.Sprite):
     def __init__(self,x,y,raio,imagem):
@@ -97,7 +122,6 @@ class Bola(pg.sprite.Sprite):
                 self.rect  = self.image.get_rect()
                 self.rect_center = old_center
 
-
 class Jogador(pg.sprite.Sprite):
     def __init__(self,game,x,imagem,teclas):
         pg.sprite.Sprite.__init__(self)
@@ -175,3 +199,21 @@ class Sombra(pg.sprite.Sprite):
 
     def update(self):
         self.rect.x = self.game.bola.rect.x - 6
+
+class Powerup(pg.sprite.Sprite):
+    def __init__(self,game):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+        self.type = random.choice(['velocidade','crescer','diminuir'])
+        self.image = self.game.powerup_images[self.type]
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.centery = HEIGHT/2
+        self.rect.centerx = random.randrange(60,WIDTH-60)
+        self.speedy = 2
+
+    def update(self):
+        self.rect.y += self.speedy
+        #para a descida se encostar no chao
+        if self.rect.bottom > HEIGHT-30:
+            self.speedy = 0

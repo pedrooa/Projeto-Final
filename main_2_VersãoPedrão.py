@@ -2,6 +2,7 @@
 #Programa main que rodará tudo
 import pygame as pg
 import math
+import random
 from os import path
 from settings import *
 from Sprites import *
@@ -16,7 +17,6 @@ class Game:
         pg.display.set_caption("Head Soccer pre-pre-pre-Alpha")
         self.clock = pg.time.Clock()
         self.font = pg.font.SysFont("Arial", 16)
-
 
     def new(self):
         #start a new game
@@ -38,20 +38,31 @@ class Game:
                                                 "cabeca2.png")).convert()
         self.SoccerBall = pg.image.load(path.join(img_folder, \
                                                 "SoccerBall.png")).convert()
-        self.trave_1 = pg.image.load(path.join(img_folder, \
-                                                "trave_1.png")).convert()
-        self.trave_2 = pg.image.load(path.join(img_folder, \
-                                                "trave_2.png")).convert()
         self.sombra_bola = pg.image.load(path.join(img_folder, \
                                                 "ball_shadow.png")).convert()
+
+        self.traves1 = []
+        self.traves1_lista = ['trave_1.png','Trave_1_grande.png','Trave_1_pequena.png']
+        for img in self.traves1_lista :
+             self.traves1.append(pg.image.load(path.join(img_folder,img)).convert())
+
+        self.traves2 = []
+        self.traves2_lista = ['trave_2.png','Trave_2_grande.png','Trave_2_pequena.png']
+        for img in self.traves2_lista :
+             self.traves2.append(pg.image.load(path.join(img_folder,img)).convert())
+
+        self.powerup_images = {}
+        self.powerup_images['velocidade'] = pg.image.load(path.join(img_folder,'bolt_gold.png')).convert()
+        self.powerup_images['crescer'] = pg.image.load(path.join(img_folder,'crescer.png')).convert()
+        self.powerup_images['diminuir'] = pg.image.load(path.join(img_folder,'diminuir.png')).convert()
 
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,20,self.SoccerBall)
         self.player1 = Jogador(self,WIDTH*1/3,self.player1_img,0)
         self.player2 = Jogador(self,WIDTH*2/3,self.player2_img,1)
         self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
-        self.trave1 = Trave(self.trave_1,2,HEIGHT - 145)
-        self.trave2 = Trave(self.trave_2,WIDTH - 60, HEIGHT - 145)
+        self.trave1 = Trave(self.traves1[0],2,HEIGHT - 145,self)
+        self.trave2 = Trave(self.traves2[0],WIDTH - 60, HEIGHT - 145,self)
         self.sombra = Sombra(self,self.sombra_bola)
 
         #Sprite Groups
@@ -62,6 +73,7 @@ class Game:
         self.todos_jogadores = pg.sprite.Group()
         self.trave_1_group = pg.sprite.Group()
         self.trave_2_group = pg.sprite.Group()
+        self.powerups = pg.sprite.Group()
 
         #Adicionando nos grupos de sprites
         self.all_sprites.add(self.player1)
@@ -78,6 +90,8 @@ class Game:
         self.todos_jogadores.add(self.player1)
         self.todos_jogadores.add(self.player2)
         self.all_sprites.add(self.sombra)
+
+        self.poweruptime = pg.time.get_ticks()
 
         self.run()
 
@@ -98,6 +112,15 @@ class Game:
     def update(self):
         #Game loop update
         self.all_sprites.update()
+
+        #Aparecimento de powerups
+        now = pg.time.get_ticks()
+        if now - self.poweruptime > 5000:
+            self.poweruptime = now
+            poder = Powerup(self)
+            self.all_sprites.add(poder)
+
+
 
     '''def playMusicJ3():
         pg.mixer.music.load(J3)
@@ -225,6 +248,11 @@ class Game:
         if self.colisao:
             self.bola.collide(self.colisao[0])
 
+        #Checa se o jogador pegou um powerup
+        hits = pg.sprite.spritecollide(self.player1,self.powerups,True)
+        for hit in hits:
+            pass
+
     def events(self):
         #Game loop events
         for event in pg.event.get():
@@ -254,10 +282,6 @@ class Game:
         self.draw_text(self.screen,str(self.player1_score), 40, WIDTH/2 - 50, 10)
         self.draw_text(self.screen,str(self.player2_score), 40, WIDTH/2 + 10, 10)
         self.draw_text(self.screen,str(round(self.timer2,1)), 40, WIDTH*5/6, 10)
-        """"self.draw_text(self.screen,":", 40, WIDTH/2 - 20)
-        self.draw_text(self.screen,str(self.player1_score), 40, WIDTH/2 - 50)
-        self.draw_text(self.screen,str(self.player2_score), 40, WIDTH/2 + 10)
-        self.draw_text(self.screen,str(round(self.timer2,1)), 40, WIDTH*5/6)"""
         self.all_sprites.draw(self.screen) #rodando os sprites
 
         # *after* drawing everything, flip the display
