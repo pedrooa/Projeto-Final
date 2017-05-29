@@ -178,10 +178,10 @@ class Jogador(pg.sprite.Sprite):
         self.vel.x = self.vel.x * 4
 
 class Campo(pg.sprite.Sprite):
-    def __init__(self, x , y, w, h):
+    def __init__(self, x , y, imagem, w, h):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((w,h))
-        self.image.fill(GREEN)
+        self.image = pg.transform.scale(imagem, (w,h))
+        self.image.set_colorkey(RED)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

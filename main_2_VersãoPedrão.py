@@ -41,6 +41,7 @@ class Game:
         self.sombra_bola = pg.image.load(path.join(img_folder, \
                                                 "ball_shadow.png")).convert()
 
+
         self.traves1 = []
         self.traves1_lista = ['trave_1.png','Trave_1_grande.png','Trave_1_pequena.png']
         for img in self.traves1_lista :
@@ -56,11 +57,13 @@ class Game:
         self.powerup_images['crescer'] = pg.image.load(path.join(img_folder,'crescer.png')).convert()
         self.powerup_images['diminuir'] = pg.image.load(path.join(img_folder,'diminuir.png')).convert()
 
+        self.grass_2 = pg.image.load(path.join(img_folder, \
+                                                "grass_2.png")).convert()
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,20,self.SoccerBall)
         self.player1 = Jogador(self,WIDTH*1/3,self.player1_img,0)
         self.player2 = Jogador(self,WIDTH*2/3,self.player2_img,1)
-        self.campo_futebol = Campo(0,HEIGHT - 30,WIDTH,30)
+        self.campo_futebol = Campo(0,HEIGHT - 30,self.grass_2,WIDTH,30)
         self.trave1 = Trave(self.traves1[0],2,HEIGHT - 145,self)
         self.trave2 = Trave(self.traves2[0],WIDTH - 60, HEIGHT - 145,self)
         self.sombra = Sombra(self,self.sombra_bola)
