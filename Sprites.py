@@ -23,7 +23,7 @@ class Trave(pg.sprite.Sprite):
 
     def update(self):
         #Encerrar o powerup
-        if self.power >= 2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+        if self.power >= 2 or self.power < 1 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
             self.power = 1
             self.power_time = pg.time.get_ticks()
         self.golmaior()
@@ -70,6 +70,8 @@ class Bola(pg.sprite.Sprite):
         self.rot = 0
         self.last_update = pg.time.get_ticks()
         self.mask = pg.mask.from_surface(self.image)
+        self.trilha = []
+        self.counter = pg.time.Clock()
 
     def update(self):
         self.acc = vetor(0,0.4)
@@ -80,6 +82,8 @@ class Bola(pg.sprite.Sprite):
         self.pos += self.vel
         self.rect.center = self.pos
 
+        for ponto in self.trilha:
+            pg.draw.circle(screen, BLACK, ponto,5,0)
     #Bola quica na tela
     def quicar(self):
         if self.pos.x > WIDTH - self.radius:
@@ -118,7 +122,7 @@ class Bola(pg.sprite.Sprite):
     def rotate(self):
         now = pg.time.get_ticks()
         if self.vel.x > 1 :
-            self.rot_speed = -5
+            self.rot_speed = -8
             if now - self.last_update > 50:
                 self.last_update = now
                 self.rot = (self.rot + self.rot_speed)%360
@@ -128,7 +132,7 @@ class Bola(pg.sprite.Sprite):
                 self.rect  = self.image.get_rect()
                 self.rect_center = old_center
         elif self.vel.x < -1 :
-            self.rot_speed = 5
+            self.rot_speed = 8
             if now - self.last_update > 50:
                 self.last_update = now
                 self.rot = (self.rot + self.rot_speed)%360
@@ -137,6 +141,12 @@ class Bola(pg.sprite.Sprite):
                 self.image = new_image
                 self.rect  = self.image.get_rect()
                 self.rect_center = old_center
+
+    def desenha_trilha(self):
+        if self.counter >= 1000:
+            posicao = (self.pos.x, self.pos.y)
+            self.trilha.append(posicao)
+            self.counter = pg.time.Clock()
 
 class Jogador(pg.sprite.Sprite):
     def __init__(self,game,x,imagem,teclas):

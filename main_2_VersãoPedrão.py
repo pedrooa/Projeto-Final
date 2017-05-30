@@ -59,7 +59,7 @@ class Game:
         self.grass_2 = pg.image.load(path.join(img_folder, \
                                                 "grass_2.png")).convert()
         #Criando objetos
-        self.bola = Bola(WIDTH/2 ,HEIGHT/2,20,self.SoccerBall)
+        self.bola = Bola(WIDTH/2 ,HEIGHT/2,11,self.SoccerBall)
         self.player1 = Jogador(self,WIDTH*1/3,self.player1_img,0)
         self.player2 = Jogador(self,WIDTH*2/3,self.player2_img,1)
         self.campo_futebol = Campo(0,HEIGHT - 30,self.grass_2,WIDTH,30)

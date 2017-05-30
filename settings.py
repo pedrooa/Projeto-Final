@@ -8,8 +8,7 @@ TRAVE_H_maior = 200
 TRAVE_H_menor = 80
 
 
-BOLA_W = 34
-BOLA_H = 34
+
 PLAYER_W = 50
 PLAYER_H = 50
 PLAYER_RAIO = 24
@@ -29,6 +28,8 @@ atrito = -0.12
 gravidade = 0.7
 
 #configuracoes bola
+BOLA_W = 22
+BOLA_H = 22
 arrasto = 0.999
 elasticidade = 0.75
 gravidade_bola = 0.2
