@@ -170,18 +170,24 @@ class Game:
             self.player2.vel.x = 0
             self.player1.acc.x = 0
             self.player2.acc.x = 0
-            """self.player1.vel.y = 0
-            self.player2.vel.y = 0
-            self.player1.acc.y = 0
-            self.player2.acc.y = 0"""
+            if self.bateu or self.bateu_2:
+                self.player1.vel.y = -1
+                self.player2.vel.y = -1
+                self.player1.acc.y = -1
+                self.player2.acc.y = -1
+
 
             dx = self.player1.rect.centerx - self.player2.rect.centerx
             dy = self.player2.rect.centery - self.player2.rect.centery
 
             dist = math.hypot(dx,dy)
-
             soma_raios = self.player1.radius + self.player2.radius
-            v = vetor(self.player1.rect.centerx - self.player2.rect.centerx,self.player2.rect.centery - self.player2.rect.centery)
+
+            if self.bateu or self.bateu_2:
+                v = vetor(dx, dy)
+            else:
+                v = vetor(dx, 0)
+
             v_metade = v*0.05
 
             self.player1.pos += v_metade
@@ -194,7 +200,6 @@ class Game:
                 self.player1.pos.y = self.trave1.rect.top + 2
                 self.player1.vel.y = 0
             if self.player1.pos.y - 60 <= self.trave1.rect.top:
-                self.player1.vel.y = 0
                 self.player1.vel.y = 5
 
         #Se bater na trave - player2
@@ -204,12 +209,12 @@ class Game:
                 self.player2.pos.y = self.trave2.rect.top + 2
                 self.player2.vel.y = 0
             if self.player2.pos.y - 60 <= self.trave2.rect.top:
-                self.player2.vel.y = 0
                 self.player2.vel.y = 5
+
+        # Se Bater Bola na Trave
         if self.bateu_bola_trave_1:
-            if self.bola.pos.y <= self.trave1.rect.top and self.bola.vel.y > 0:
-                self.bola.vel.y = -self.bola.vel.y
-            if self.bola.pos.y - self.bola.radius >= self.trave1.rect.top:
+            if self.bola.pos.y + self.bola.radius >= self.trave1.rect.top \
+            and self.bola.pos.x <= 67:
                 self.bola.vel.y = -self.bola.vel.y
                 self.timer += 1
                 if self.timer == 5:
@@ -227,9 +232,8 @@ class Game:
                     self.timer = 0
 
         if self.bateu_bola_trave_2:
-            if self.bola.pos.y <= self.trave2.rect.top and self.bola.vel.y > 0:
-                self.bola.vel.y = -self.bola.vel.y
-            if self.bola.pos.y - self.bola.radius >= self.trave2.rect.top:
+            if self.bola.pos.y + self.bola.radius >= self.trave2.rect.top\
+            and self.bola.pos.x >= WIDTH - 63:
                 self.bola.vel.y = -self.bola.vel.y
                 self.timer += 1
                 if self.timer == 5:

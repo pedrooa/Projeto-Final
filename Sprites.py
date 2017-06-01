@@ -22,11 +22,11 @@ class Trave(pg.sprite.Sprite):
 
 
     def update(self):
-
         #Encerrar o powerup
-        if self.power == 2 or self.power == 0  and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+        if self.power == 2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
             self.power = 1
-            power_time = 0
+        if self.power == 0 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+            self.power = 1
         self.golmaior()
 
     def golmaior(self):
@@ -35,7 +35,7 @@ class Trave(pg.sprite.Sprite):
             self.image.set_colorkey(RED)
             self.rect = self.image.get_rect()
             self.rect.x = self.x
-            self.rect.y = self.y +40
+            self.rect.y = self.y + 40
         if self.power == 1:
             self.image = pg.transform.scale(self.traves[0], (TRAVE_W,TRAVE_H))
             self.image.set_colorkey(RED)
@@ -49,11 +49,17 @@ class Trave(pg.sprite.Sprite):
             self.rect.x = self.x
             self.rect.y = self.y - 80
     def powerup_1(self):
-        self.power+=1
-        self.power_time = pg.time.get_ticks()
+        if self.power == 2:
+            self.power_time = pg.time.get_ticks()
+        else:
+            self.power += 1
+            self.power_time = pg.time.get_ticks()
     def powerup_2(self):
-        self.power -=1
-        self.power_time = pg.time.get_ticks()
+        if self.power == 0:
+            self.power_time = pg.time.get_ticks()
+        else:
+            self.power -= 1
+            self.power_time = pg.time.get_ticks()
 
 class Bola(pg.sprite.Sprite):
     def __init__(self,x,y,raio,imagem):
@@ -113,6 +119,28 @@ class Bola(pg.sprite.Sprite):
 
         dist = math.hypot(dx,dy)
         soma_raios = self.radius + other.radius
+
+        """v = vetor(dx, dy)
+        versor = v/dist
+        inter = soma_raios - dist
+
+        if inter < 0:
+            inter = -inter
+
+        if (other.pos.y < HEIGHT - 30 - other.radius):
+            (self.pos.x, self.pos.y) = (self.pos.x, self.pos.y + 10) + inter * versor * 0.75
+        else:
+            (self.pos.x, self.pos.y) = (self.pos.x, self.pos.y) + inter * versor * 0.75
+
+        force = inter
+
+        FEL = force * versor
+
+        self.vel = FEL"""
+
+
+
+
         if dist < soma_raios:
             force = 6*(soma_raios - dist)
             v = vetor(other.rect.x-self.rect.x,other.rect.y-self.rect.y)
@@ -256,7 +284,7 @@ class Powerup(pg.sprite.Sprite):
     def __init__(self,game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        self.type = random.choice(['crescer','diminuir','velocidade','gelo'])
+        self.type = random.choice(['crescer','diminuir','velocidade'])
         self.image = self.game.powerup_images[self.type]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
