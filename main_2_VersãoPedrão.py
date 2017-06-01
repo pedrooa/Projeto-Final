@@ -55,9 +55,16 @@ class Game:
         self.powerup_images['velocidade'] = pg.image.load(path.join(img_folder,'bolt_gold.png')).convert()
         self.powerup_images['crescer'] = pg.image.load(path.join(img_folder,'crescer.png')).convert()
         self.powerup_images['diminuir'] = pg.image.load(path.join(img_folder,'diminuir.png')).convert()
+        self.powerup_images['gelo'] = pg.image.load(path.join(img_folder,'gelo.jpeg')).convert()
 
         self.grass_2 = pg.image.load(path.join(img_folder, \
                                                 "grass_2.png")).convert()
+
+
+
+
+
+
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,11,self.SoccerBall)
         self.player1 = Jogador(self,WIDTH*1/3,self.player1_img,0)
@@ -116,12 +123,12 @@ class Game:
         self.all_sprites.update()
 
         #Aparecimento de powerups
-        #now = pg.time.get_ticks()
-        #if now - self.poweruptime > 5000:
-            #self.poweruptime = now
-            #poder = Powerup(self)
-            #self.all_sprites.add(poder)
-            #self.powerups.add(poder)
+        now = pg.time.get_ticks()
+        if now - self.poweruptime > 5000:
+            self.poweruptime = now
+            poder = Powerup(self)
+            self.all_sprites.add(poder)
+            self.powerups.add(poder)
 
 
 
@@ -142,17 +149,17 @@ class Game:
 
         #Colisao entre players
         self.bateu_player1_2 = pg.sprite.spritecollide(self.player1, \
-                                                        self.player2_group, False, pg.sprite.collide_circle)
+                                                        self.player2_group, False)
         self.bateu_player2_1 = pg.sprite.spritecollide(self.player2, \
-                                                        self.player1_group, False, pg.sprite.collide_circle)
+                                                        self.player1_group, False)
         self.bateu_trave1 = pg.sprite.spritecollide(self.player1, \
-                                                        self.trave_1_group, False, pg.sprite.collide_circle)
+                                                        self.trave_1_group, False)
         self.bateu_trave2 = pg.sprite.spritecollide(self.player2, \
-                                                        self.trave_2_group, False, pg.sprite.collide_circle)
+                                                        self.trave_2_group, False)
         self.bateu_bola_trave_1 = pg.sprite.spritecollide(self.bola, \
-                                                        self.trave_1_group, False, pg.sprite.collide_circle)
+                                                        self.trave_1_group, False)
         self.bateu_bola_trave_2 = pg.sprite.spritecollide(self.bola, \
-                                                        self.trave_2_group, False, pg.sprite.collide_circle)
+                                                        self.trave_2_group, False)
 
         #Se bater player1 com plataforma
         if self.bateu:
@@ -170,11 +177,12 @@ class Game:
             self.player2.vel.x = 0
             self.player1.acc.x = 0
             self.player2.acc.x = 0
-            if self.bateu or self.bateu_2:
-                self.player1.vel.y = -1
-                self.player2.vel.y = -1
-                self.player1.acc.y = -1
-                self.player2.acc.y = -1
+            #if self.bateu or self.bateu_2:
+            #    self.player1.vel.y = -1
+            #    self.player2.vel.y = -1
+            #    self.player1.acc.y = -1
+            #    self.player2.acc.y = -1
+
 
             dx = self.player1.rect.centerx - self.player2.rect.centerx
             dy = self.player2.rect.centery - self.player2.rect.centery
@@ -184,8 +192,9 @@ class Game:
 
             if self.bateu or self.bateu_2:
                 v = vetor(dx, dy)
-            else: 
+            else:
                 v = vetor(dx, 0)
+
             v_metade = v*0.05
 
             self.player1.pos += v_metade
@@ -198,22 +207,21 @@ class Game:
                 self.player1.pos.y = self.trave1.rect.top + 2
                 self.player1.vel.y = 0
             if self.player1.pos.y - 60 <= self.trave1.rect.top:
-                self.player1.vel.y = 0
                 self.player1.vel.y = 5
 
         #Se bater na trave - player2
         if self.bateu_trave2:
-            if self.player2.pos.y - 10 <= self.trave2.rect.top \
+            if self.player2.pos.y -  10 <= self.trave2.rect.top \
                                     and self.player2.vel.y  > 0:
                 self.player2.pos.y = self.trave2.rect.top + 2
                 self.player2.vel.y = 0
             if self.player2.pos.y - 60 <= self.trave2.rect.top:
-                self.player2.vel.y = 0
                 self.player2.vel.y = 5
+
+        # Se Bater Bola na Trave
         if self.bateu_bola_trave_1:
-            if self.bola.pos.y <= self.trave1.rect.top and self.bola.vel.y > 0:
-                self.bola.vel.y = -self.bola.vel.y
-            if self.bola.pos.y - self.bola.radius >= self.trave1.rect.top:
+            if self.bola.pos.y + self.bola.radius >= self.trave1.rect.top \
+            and self.bola.pos.x <= 67:
                 self.bola.vel.y = -self.bola.vel.y
                 self.timer += 1
                 if self.timer == 5:
@@ -231,9 +239,8 @@ class Game:
                     self.timer = 0
 
         if self.bateu_bola_trave_2:
-            if self.bola.pos.y <= self.trave2.rect.top and self.bola.vel.y > 0:
-                self.bola.vel.y = -self.bola.vel.y
-            if self.bola.pos.y - self.bola.radius >= self.trave2.rect.top:
+            if self.bola.pos.y + self.bola.radius >= self.trave2.rect.top\
+            and self.bola.pos.x >= WIDTH - 63:
                 self.bola.vel.y = -self.bola.vel.y
                 self.timer += 1
                 if self.timer == 5:
@@ -262,6 +269,10 @@ class Game:
                 self.trave2.powerup_1()
             if hit.type == 'diminuir':
                 self.trave2.powerup_2()
+            if hit.type == 'gelo':
+                self.player1.powerup_gelo()
+            if hit.type == 'raio':
+                self.player1.powerup_raio()
 
         #Checa se o jogador2 pegou um powerup
         self.hits = pg.sprite.spritecollide(self.player2,self.powerups,True)
@@ -270,7 +281,10 @@ class Game:
                 self.trave1.powerup_1()
             if hit.type == 'diminuir':
                 self.trave1.powerup_2()
-
+            if hit.type == 'gelo':
+                self.player2.powerup_gelo()
+            if hit.type == 'velocidade':
+                self.player2.powerup_raio()
     def events(self):
         #Game loop events
         for event in pg.event.get():
@@ -306,8 +320,41 @@ class Game:
         pg.display.flip()
 
     def show_start_screen(self):
+        game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, "Imagens")
+
+        self.titulo = pg.image.load(path.join(img_folder, "titulo.PNG")).convert() #imagem do titulo
+        self.bright_play = pg.image.load(path.join(img_folder, "bright_play.PNG")).convert() # botão play com o mouse em cima
+        self.play = pg.image.load(path.join(img_folder, "play.PNG")).convert() #botão play
+        self.quit = pg.image.load(path.join(img_folder, "quit.PNG")).convert() #botão quit
+        self.quit_bright = pg.image.load(path.join(img_folder, "quit_bright.PNG")).convert() #botão quit com o mouse em cima
+        self.background1 = pg.image.load(path.join(img_folder, "background1.JPG")).convert() #fundo
+        #menu
+        self.background2 = self.background1.get_rect()
+        self.background2.x = WIDTH/2
+        self.background2.y = HEIGHT*2/3
+        self.screen.blit(self.background1, self.background2)
+
         #Game Start Screen
-        pass
+        intro = True
+
+
+        while intro:
+            self.background2 = self.background1.get_rect()
+            self.screen.blit(self.background1, self.background2)
+            self.screen.blit(self.titulo, (WIDTH*1/7,0))
+            self.button(self.play,128,360,298,426,self.bright_play,'play')
+            self.button(self.quit,561,360,717,435,self.quit_bright,'quit')
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                #print (event)
+                #if event.type == pygame.MOUSEBUTTONDOWN:
+
+            pg.display.update()
+
+
 
     def show_GO_screen(self):
         #Game Over show_GO_screen
@@ -320,6 +367,40 @@ class Game:
         text_rect.midtop = (x, y)
         surf.blit(text_surface, text_rect)
 
+    def button(self,img, x, y, width, height, img1, action = None):
+        self.cur = pg.mouse.get_pos()
+        self.click = pg.mouse.get_pressed()
+        self.screen.blit (img, (x,y))
+        if x+width > self.cur[0] > x and y+height > self.cur[1] > y:
+            self.screen.blit(img, (x,y))
+            if self.click[0] == 1 and action != None:
+
+                #se der tempo/ nao tiver funcionando colocar na função menu
+
+                if action == "play":
+                    self.new()
+
+
+                elif action == "quit":
+                    pg.quit()
+                    quit()
+
+                elif action == "menu":
+                    screen
+                    menu()
+        else:
+            self.screen.blit(img1, (x,y))
+
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.running = False
+                if event.type == pg.KEYUP:
+                    waiting = False
 g = Game()
 g.show_start_screen()
 while g.running:

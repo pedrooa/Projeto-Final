@@ -120,27 +120,6 @@ class Bola(pg.sprite.Sprite):
         dist = math.hypot(dx,dy)
         soma_raios = self.radius + other.radius
 
-        """v = vetor(dx, dy)
-        versor = v/dist
-        inter = soma_raios - dist
-
-        if inter < 0:
-            inter = -inter
-
-        if (other.pos.y < HEIGHT - 30 - other.radius):
-            (self.pos.x, self.pos.y) = (self.pos.x, self.pos.y + 10) + inter * versor * 0.75
-        else:
-            (self.pos.x, self.pos.y) = (self.pos.x, self.pos.y) + inter * versor * 0.75
-
-        force = inter
-
-        FEL = force * versor
-
-        self.vel = FEL"""
-
-
-
-
         if dist < soma_raios:
             force = 6*(soma_raios - dist)
             v = vetor(other.rect.x-self.rect.x,other.rect.y-self.rect.y)
@@ -284,7 +263,7 @@ class Powerup(pg.sprite.Sprite):
     def __init__(self,game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        self.type = random.choice(['crescer','diminuir','velocidade'])
+        self.type = random.choice(['crescer','diminuir','velocidade','gelo'])
         self.image = self.game.powerup_images[self.type]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()

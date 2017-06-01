@@ -55,6 +55,7 @@ class Game:
         self.powerup_images['velocidade'] = pg.image.load(path.join(img_folder,'bolt_gold.png')).convert()
         self.powerup_images['crescer'] = pg.image.load(path.join(img_folder,'crescer.png')).convert()
         self.powerup_images['diminuir'] = pg.image.load(path.join(img_folder,'diminuir.png')).convert()
+        self.powerup_images['gelo'] = pg.image.load(path.join(img_folder,'gelo.jpeg')).convert()
 
         self.grass_2 = pg.image.load(path.join(img_folder, \
                                                 "grass_2.png")).convert()
@@ -268,6 +269,10 @@ class Game:
                 self.trave2.powerup_1()
             if hit.type == 'diminuir':
                 self.trave2.powerup_2()
+            if hit.type == 'gelo':
+                self.player1.powerup_gelo()
+            if hit.type == 'raio':
+                self.player1.powerup_raio()
 
         #Checa se o jogador2 pegou um powerup
         self.hits = pg.sprite.spritecollide(self.player2,self.powerups,True)
@@ -276,7 +281,10 @@ class Game:
                 self.trave1.powerup_1()
             if hit.type == 'diminuir':
                 self.trave1.powerup_2()
-
+            if hit.type == 'gelo':
+                self.player2.powerup_gelo()
+            if hit.type == 'velocidade':
+                self.player2.powerup_raio()
     def events(self):
         #Game loop events
         for event in pg.event.get():
