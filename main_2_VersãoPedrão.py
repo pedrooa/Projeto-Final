@@ -1,3 +1,4 @@
+
 #Head Soccer Game - Vitor, Gabriel, Pedro e Manzanna
 #Programa main que rodará tudo
 import pygame as pg
@@ -16,7 +17,9 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption("Head Soccer pre-pre-pre-Alpha")
         self.clock = pg.time.Clock()
-        self.font = pg.font.SysFont("Arial", 16)
+        self.font = pg.font.SysFont("Arial", 18)
+        self.font_name = pg.font.match_font('arial')
+        self.intro = True
 
     def new(self):
         #start a new game
@@ -24,8 +27,7 @@ class Game:
         self.player1_score = 0
         self.player2_score = 0
         self.timer = 0
-        self.timer2 = pg.time.get_ticks()/1000
-
+        
         #carregando Imagens
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
@@ -121,10 +123,11 @@ class Game:
     def update(self):
         #Game loop update
         self.all_sprites.update()
+        self.timer2 = pg.time.get_ticks()/1000 - self.timer_menu
 
         #Aparecimento de powerups
         now = pg.time.get_ticks()
-        if now - self.poweruptime > 5000:
+        if now - self.poweruptime > 10000:
             self.poweruptime = now
             poder = Powerup(self)
             self.all_sprites.add(poder)
@@ -309,11 +312,11 @@ class Game:
         self.screen.fill(BLACK)
         self.screen.blit(self.background, self.background_rect)
         # Info and flip screen
-        self.screen.blit(self.font.render("fps: " + str(self.clock.get_fps()), 1, WHITE), (0,0))
-        self.draw_text(self.screen,":", 40, WIDTH/2 - 20,10)
-        self.draw_text(self.screen,str(self.player1_score), 40, WIDTH/2 - 50, 10)
-        self.draw_text(self.screen,str(self.player2_score), 40, WIDTH/2 + 10, 10)
-        self.draw_text(self.screen,str(round(self.timer2,1)), 40, WIDTH*5/6, 10)
+        self.screen.blit(self.font.render("fps: " + str(round(self.clock.get_fps())), 1, WHITE), (0,0))
+        self.draw_text(self.screen,":", 70, WIDTH/2 ,10)
+        self.draw_text(self.screen,str(self.player1_score), 70, WIDTH/2 - 30, 10)
+        self.draw_text(self.screen,str(self.player2_score), 70, WIDTH/2 + 30, 10)
+        self.draw_text(self.screen,str(round(self.timer2,1)), 50, WIDTH*5/6, 10)
         self.all_sprites.draw(self.screen) #rodando os sprites
 
         # *after* drawing everything, flip the display
@@ -323,12 +326,13 @@ class Game:
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
 
+        self.fundo = pg.image.load(path.join(img_folder, "background1.JPG")).convert()
         self.titulo = pg.image.load(path.join(img_folder, "titulo.PNG")).convert() #imagem do titulo
         self.bright_play = pg.image.load(path.join(img_folder, "bright_play.PNG")).convert() # botão play com o mouse em cima
         self.play = pg.image.load(path.join(img_folder, "play.PNG")).convert() #botão play
         self.quit = pg.image.load(path.join(img_folder, "quit.PNG")).convert() #botão quit
         self.quit_bright = pg.image.load(path.join(img_folder, "quit_bright.PNG")).convert() #botão quit com o mouse em cima
-        self.background1 = pg.image.load(path.join(img_folder, "background1.JPG")).convert() #fundo
+        self.background1 = pg.transform.scale(self.fundo,(WIDTH,HEIGHT)) #fundo
         #menu
         self.background2 = self.background1.get_rect()
         self.background2.x = WIDTH/2
@@ -336,32 +340,67 @@ class Game:
         self.screen.blit(self.background1, self.background2)
 
         #Game Start Screen
-        intro = True
 
 
-        while intro:
+        while self.intro:
             self.background2 = self.background1.get_rect()
             self.screen.blit(self.background1, self.background2)
             self.screen.blit(self.titulo, (WIDTH*1/7,0))
             self.button(self.play,128,360,298,426,self.bright_play,'play')
             self.button(self.quit,561,360,717,435,self.quit_bright,'quit')
+            self.timer_menu = pg.time.get_ticks()/1000
+
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
-                #print (event)
-                #if event.type == pygame.MOUSEBUTTONDOWN:
 
             pg.display.update()
 
 
-
     def show_GO_screen(self):
         #Game Over show_GO_screen
-        pass
+        game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, "Imagens")
+        #carregando as imagens
+        self.play = pg.image.load(path.join(img_folder, "play.PNG")).convert() #botão play
+        self.quit = pg.image.load(path.join(img_folder, "quit.PNG")).convert() #botão quit
+        self.c1 = pg.image.load(path.join(img_folder, "cabeca1.png")).convert()
+        self.c2 = pg.image.load(path.join(img_folder, "cabeca2.png")).convert()
+        self.c3 = pg.image.load(path.join(img_folder, "bob.png")).convert()
+        self.c4 = pg.image.load(path.join(img_folder, "fabuloso.png")).convert()
+        self.c5 = pg.image.load(path.join(img_folder, "pizzi.png")).convert()
+        self.c6 = pg.image.load(path.join(img_folder, "ronalducho.png")).convert()
+        self.c7 = pg.image.load(path.join(img_folder, "rooney.png")).convert()
+        self.fundo = pg.image.load(path.join(img_folder, "background1.JPG")).convert()
+        self.background1 = pg.transform.scale(self.fundo,(WIDTH,HEIGHT)) #fundo
+        #menu
+        self.background2 = self.background1.get_rect()
+        self.background2.x = WIDTH/2
+        self.background2.y = HEIGHT*2/3
+        self.screen.blit(self.background1, self.background2)
+
+        #Game Start Screen
+        verdade = True
+
+        while verdade:
+            self.background2 = self.background1.get_rect()
+            self.screen.blit(self.background1, self.background2)
+            self.screen.blit(self.titulo, (WIDTH*1/7,0))
+            self.button(self.play,100,500,298,426,self.bright_play,'jogar')
+            self.button(self.quit,500,500,717,435,self.quit_bright,'quit')
+            self.button(self.quit,500,500,717,435,self.quit_bright,'quit')
+            self.timer_menu = pg.time.get_ticks()/1000
+            
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+            pg.display.update()
+
 
     def draw_text(self,surf, text, size, x, y):
-        font = self.font
+        font = pg.font.Font(self.font_name, size)
         text_surface = font.render(text, True, WHITE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
@@ -378,16 +417,21 @@ class Game:
                 #se der tempo/ nao tiver funcionando colocar na função menu
 
                 if action == "play":
-                    self.new()
+                    self.intro = False
+                    print(1)
+                    self.show_GO_screen()
+                    
 
 
                 elif action == "quit":
                     pg.quit()
                     quit()
 
-                elif action == "menu":
-                    screen
-                    menu()
+                
+                elif action == "jogar":
+                    print(2)
+                    self.new()
+                    
         else:
             self.screen.blit(img1, (x,y))
 
