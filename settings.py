@@ -4,7 +4,7 @@ import pygame as pg
 vetor = pg.math.Vector2
 TRAVE_W = 60
 TRAVE_H = 120
-TRAVE_H_maior = 200
+TRAVE_H_maior = 170
 TRAVE_H_menor = 80
 
 

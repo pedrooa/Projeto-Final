@@ -47,7 +47,7 @@ class Trave(pg.sprite.Sprite):
             self.image.set_colorkey(RED)
             self.rect = self.image.get_rect()
             self.rect.x = self.x
-            self.rect.y = self.y - 80
+            self.rect.y = self.y - 120
     def powerup_1(self):
         if self.power == 2:
             self.power_time = pg.time.get_ticks()
