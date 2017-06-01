@@ -323,12 +323,13 @@ class Game:
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
 
+        self.fundo = pg.image.load(path.join(img_folder, "background1.JPG")).convert()
         self.titulo = pg.image.load(path.join(img_folder, "titulo.PNG")).convert() #imagem do titulo
         self.bright_play = pg.image.load(path.join(img_folder, "bright_play.PNG")).convert() # botão play com o mouse em cima
         self.play = pg.image.load(path.join(img_folder, "play.PNG")).convert() #botão play
         self.quit = pg.image.load(path.join(img_folder, "quit.PNG")).convert() #botão quit
         self.quit_bright = pg.image.load(path.join(img_folder, "quit_bright.PNG")).convert() #botão quit com o mouse em cima
-        self.background1 = pg.image.load(path.join(img_folder, "background1.JPG")).convert() #fundo
+        self.background1 = pg.transform.scale(self.fundo,(WIDTH,HEIGHT)) #fundo
         #menu
         self.background2 = self.background1.get_rect()
         self.background2.x = WIDTH/2
@@ -340,20 +341,17 @@ class Game:
 
 
         while intro:
-            self.background2 = self.background1.get_rect()
-            self.screen.blit(self.background1, self.background2)
-            self.screen.blit(self.titulo, (WIDTH*1/7,0))
-            self.button(self.play,128,360,298,426,self.bright_play,'play')
-            self.button(self.quit,561,360,717,435,self.quit_bright,'quit')
+        	self.background2 = self.background1.get_rect()
+        	self.screen.blit(self.background1, self.background2)
+        	self.screen.blit(self.titulo, (WIDTH*1/7,0))
+        	self.button(self.play,128,360,298,426,self.bright_play,'play')
+        	self.button(self.quit,561,360,717,435,self.quit_bright,'quit')
 
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                #print (event)
-                #if event.type == pygame.MOUSEBUTTONDOWN:
+        	for event in pg.event.get():
+        		if event.type == pg.QUIT:
+        			pg.quit()
 
-            pg.display.update()
-
+        	pg.display.update()
 
 
     def show_GO_screen(self):
