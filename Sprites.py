@@ -23,7 +23,7 @@ class Trave(pg.sprite.Sprite):
 
     def update(self):
         #Encerrar o powerup
-        if self.power >= 2 or self.power < 1 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+        if self.power == 2 or self.power == 0  and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
             self.power = 1
             self.power_time = pg.time.get_ticks()
         self.golmaior()
