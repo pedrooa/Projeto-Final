@@ -33,12 +33,12 @@ class Game:
         #carregando Imagens
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
-        J3_folder = path.join(game_folder, "Musicas", 'J3.mp3')
-        Naruto_folder = path.join(game_folder, "Musicas", 'Naruto.mp3')
-        Ronaldo_folder = path.join(game_folder, "Musicas", 'Ronaldo.mp3')
-        Skank_folder = path.join(game_folder, "Musicas", 'Skank.mp3')
-        Nascido_folder = path.join(game_folder, "Musicas", 'Nascido.mp3')
-        Guime_folder = path.join(game_folder, "Musicas", 'Guime.mp3')
+        J3_folder = path.join(game_folder, "Musicas", 'J3.wav')
+        Naruto_folder = path.join(game_folder, "Musicas", 'Naruto.wav')
+        Ronaldo_folder = path.join(game_folder, "Musicas", 'Ronaldo.wav')
+        Skank_folder = path.join(game_folder, "Musicas", 'Skank.wav')
+        Nascido_folder = path.join(game_folder, "Musicas", 'Nascido.wav')
+        Guime_folder = path.join(game_folder, "Musicas", 'Guime.wav')
 
         self.background = pg.image.load(path.join(img_folder, \
                                                 'background2.jpeg')).convert()
@@ -296,7 +296,7 @@ class Game:
                 self.player2.powerup_gelo()
             if hit.type == 'velocidade':
                 self.player2.powerup_raio()
-    
+
     def events(self):
         #Game loop events
         for event in pg.event.get():
@@ -334,7 +334,7 @@ class Game:
     def show_start_screen(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
-        Guime_folder = path.join(game_folder, "Musicas", 'Guime.mp3')
+        Guime_folder = path.join(game_folder, "Musicas", 'Guime.wav')
         pg.mixer.music.load(Guime_folder)
         pg.mixer.music.play(-1)
 
