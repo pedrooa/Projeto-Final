@@ -47,7 +47,7 @@ class Trave(pg.sprite.Sprite):
             self.image.set_colorkey(RED)
             self.rect = self.image.get_rect()
             self.rect.x = self.x
-            self.rect.y = self.y - 120
+            self.rect.y = self.y - 48
     def powerup_1(self):
         if self.power == 2:
             self.power_time = pg.time.get_ticks()
@@ -184,9 +184,10 @@ class Jogador(pg.sprite.Sprite):
             self.vel.y = -12
 
     def update(self):
-        if self.power == 2 or self.power < 1 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+        if self.power == 2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
             self.power = 1
-            self.power_time = pg.time.get_ticks()
+        if self.power == 0 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
+            self.power = 1
 
 
         self.acc = vetor(0, gravidade)
@@ -230,11 +231,17 @@ class Jogador(pg.sprite.Sprite):
 
 
     def powerup_raio(self):
-        self.power += 1
-        self.power_time = pg.time.get_ticks()
+        if self.power == 2:
+            self.power_time = pg.time.get_ticks()
+        else:
+            self.power += 1
+            self.power_time = pg.time.get_ticks()
     def powerup_gelo(self):
-        self.power -= 1
-        self.power_time = pg.time.get_ticks()
+        if self.power == 0:
+            self.power_time = pg.time.get_ticks()
+        else:
+            self.power -= 1
+            self.power_time = pg.time.get_ticks()
 
 class Campo(pg.sprite.Sprite):
     def __init__(self, x , y, imagem, w, h):
@@ -263,7 +270,8 @@ class Powerup(pg.sprite.Sprite):
     def __init__(self,game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        self.type = random.choice(['crescer','diminuir','velocidade','gelo'])
+        #self.type = random.choice(['crescer','diminuir','velocidade','gelo'])
+        self.type = random.choice(['velocidade'])
         self.image = self.game.powerup_images[self.type]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()

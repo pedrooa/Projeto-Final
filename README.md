@@ -26,6 +26,6 @@
 
 26/05
 --> tela de entrada & tela vitoria/derrota - Andre Neustein(manzana)
---> bugs de contato - Azambusha
+--> bugs de contato & organizacao geral - Azambusha
 --> dash & musicas & efeitos sonoros & organizar código - Vitor
 --> power ups &  ScoreBoard & escolha personagem - Gabriel Ligeiro

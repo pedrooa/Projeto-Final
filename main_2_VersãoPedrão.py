@@ -15,7 +15,7 @@ class Game:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption("Head Soccer pre-pre-pre-Alpha")
+        pg.display.set_caption("Head Soccer!")
         self.clock = pg.time.Clock()
         self.font = pg.font.SysFont("Arial", 18)
         self.font_name = pg.font.match_font('arial')
@@ -52,6 +52,14 @@ class Game:
         self.sombra_bola = pg.image.load(path.join(img_folder, \
                                                 "ball_shadow.png")).convert()
 
+        self.p1_win = pg.image.load(path.join(img_folder, \
+                                                "P1_WIN.png")).convert_alpha()
+        self.p2_win = pg.image.load(path.join(img_folder, \
+                                                "P2_WIN.png")).convert_alpha()
+        self.empate = pg.image.load(path.join(img_folder, \
+                                                "EMPATE.png")).convert_alpha()
+
+
         self.traves1 = []
         self.traves1_lista = ['trave_1.png','Trave_1_grande.png','Trave_1_pequena.png']
         for img in self.traves1_lista :
@@ -63,20 +71,20 @@ class Game:
              self.traves2.append(pg.image.load(path.join(img_folder,img)).convert_alpha())
 
         self.jogadores_2 = []
-        self.jogadores_lista_1 = ['cabeca1.png','cabeca2.png','bob.png','fabuloso.png','pizzi.png','ronalducho.png','rooney.png']
-        for img in self.jogadores_lista_1:
+        self.jogadores_lista_2 = ['cabeca1.png','cabeca2.png','bob.png','fabuloso.png','pizzi.png','ronalducho.png','rooney.png']
+        for img in self.jogadores_lista_2:
             self.jogadores_2.append(pg.image.load(path.join(img_folder,img)).convert_alpha())
 
         self.jogadores_1 = []
-        self.jogadores_lista_2 = ['cabeca1_2.png','cabeca2_2.png','bob_2.png','fabuloso_2.png','pizzi_2.png','ronalducho_2.png','rooney_2.png']
-        for img in self.jogadores_lista_2:
+        self.jogadores_lista_1 = ['cabeca1_2.png','cabeca2_2.png','bob_2.png','fabuloso_2.png','pizzi_2.png','ronalducho_2.png','rooney_2.png']
+        for img in self.jogadores_lista_1:
             self.jogadores_1.append(pg.image.load(path.join(img_folder,img)).convert_alpha())
 
         self.powerup_images = {}
         self.powerup_images['velocidade'] = pg.image.load(path.join(img_folder,'bolt_gold.png')).convert()
         self.powerup_images['crescer'] = pg.image.load(path.join(img_folder,'crescer.png')).convert()
         self.powerup_images['diminuir'] = pg.image.load(path.join(img_folder,'diminuir.png')).convert()
-        self.powerup_images['gelo'] = pg.image.load(path.join(img_folder,'gelo.jpeg')).convert()
+        self.powerup_images['gelo'] = pg.image.load(path.join(img_folder,'gelo.png')).convert()
 
         self.grass_2 = pg.image.load(path.join(img_folder, \
                                                 "grass_2.png")).convert()
@@ -133,7 +141,7 @@ class Game:
             self.update()
             self.colision()
             self.draw()
-            if self.timer2 >= 60:
+            if self.timer2 >= 65:
                 if self.playing:
                     self.playing = False
                 self.running = False
@@ -327,6 +335,17 @@ class Game:
         self.draw_text(self.screen,str(self.player2_score), 70, WIDTH/2 + 30, 10)
         self.draw_text(self.screen,str(round(self.timer2,1)), 50, WIDTH*5/6, 10)
         self.all_sprites.draw(self.screen) #rodando os sprites
+        if self.timer2 >= 60:
+                self.player1.vel.x = 0
+                self.player2.vel.x = 0
+                self.bola.pos.x = WIDTH/2
+                self.bola.pos.y = HEIGHT/2
+                if self.player1_score > self.player2_score:
+                    self.screen.blit(self.p1_win, (WIDTH/10, 100))
+                if self.player1_score < self.player2_score:
+                    self.screen.blit(self.p2_win, (WIDTH/10, 100))
+                if self.player1_score == self.player2_score:
+                    self.screen.blit(self.empate, (WIDTH/10, 100))
 
         # *after* drawing everything, flip the display
         pg.display.flip()
@@ -406,6 +425,8 @@ class Game:
         self.c6en = pg.image.load(path.join(img_folder, "ronalducho_selecionado2.png")).convert_alpha()
         self.c7en = pg.image.load(path.join(img_folder, "rooney_selecionado2.png")).convert_alpha()
         self.fundo = pg.image.load(path.join(img_folder, "background1.JPG")).convert_alpha()
+        self.p1 = pg.image.load(path.join(img_folder, "P1.png")).convert_alpha()
+        self.p2 = pg.image.load(path.join(img_folder, "P2.png")).convert_alpha()
 
         self.background1 = pg.transform.scale(self.fundo,(WIDTH,HEIGHT)) #fundo
         #menu
@@ -421,6 +442,8 @@ class Game:
             self.background2 = self.background1.get_rect()
             self.screen.blit(self.background1, self.background2)
             self.screen.blit(self.titulo, (WIDTH*1/7,0))
+            self.screen.blit(self.p1, (100,190))
+            self.screen.blit(self.p2, (500,190))
             self.button(self.play,100,500,170,66,self.bright_play,'jogar')
             self.button(self.quit,500,500,1560,75,self.quit_bright,'quit')
             self.button(self.c1,500,250,60,60,self.c1n,'c1')
@@ -465,7 +488,6 @@ class Game:
 
                 if action == "play":
                     self.intro = False
-                    print(1)
                     self.show_GO_screen()
 
 
@@ -476,36 +498,35 @@ class Game:
 
 
                 elif action == "jogar":
-                    print(2)
                     self.new()
                 elif action == "c1":
-                    self.num = 0
-                elif action == "c2":
-                    self.num = 1
-                elif action == "c3":
-                    self.num = 2
-                elif action == "c4":
-                    self.num = 3
-                elif action == "c5":
-                    self.num = 4
-                elif action == "c6":
-                    self.num = 5
-                elif action == "c7":
-                    self.num = 6
-                elif action == "c1e":
                     self.num1 = 0
-                elif action == "c2e":
+                elif action == "c2":
                     self.num1 = 1
-                elif action == "c3e":
+                elif action == "c3":
                     self.num1 = 2
-                elif action == "c4e":
+                elif action == "c4":
                     self.num1 = 3
-                elif action == "c5e":
+                elif action == "c5":
                     self.num1 = 4
-                elif action == "c6e":
+                elif action == "c6":
                     self.num1 = 5
-                elif action == "c7e":
+                elif action == "c7":
                     self.num1 = 6
+                elif action == "c1e":
+                    self.num = 0
+                elif action == "c2e":
+                    self.num = 1
+                elif action == "c3e":
+                    self.num = 2
+                elif action == "c4e":
+                    self.num = 3
+                elif action == "c5e":
+                    self.num = 4
+                elif action == "c6e":
+                    self.num = 5
+                elif action == "c7e":
+                    self.num = 6
         else:
             self.screen.blit(img1, (x,y))
 

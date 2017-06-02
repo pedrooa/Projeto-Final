@@ -25,7 +25,7 @@ BLUE = (0, 0, 255)
 #setting para a movimentacao com vetor
 aceleração_maxima = 0.9
 atrito = -0.12
-atrito_powerup = -0.06
+atrito_powerup = -0.005
 atrito_gelo = -0.30
 gravidade = 0.7
 
