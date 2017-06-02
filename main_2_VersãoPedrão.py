@@ -29,10 +29,17 @@ class Game:
         self.player1_score = 0
         self.player2_score = 0
         self.timer = 0
-        
+
         #carregando Imagens
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
+        J3_folder = path.join(game_folder, "Musicas", 'J3.mp3')
+        Naruto_folder = path.join(game_folder, "Musicas", 'Naruto.mp3')
+        Ronaldo_folder = path.join(game_folder, "Musicas", 'Ronaldo.mp3')
+        Skank_folder = path.join(game_folder, "Musicas", 'Skank.mp3')
+        Nascido_folder = path.join(game_folder, "Musicas", 'Nascido.mp3')
+        Guime_folder = path.join(game_folder, "Musicas", 'Guime.mp3')
+
         self.background = pg.image.load(path.join(img_folder, \
                                                 'background2.jpeg')).convert()
         self.background_rect = self.background.get_rect()
@@ -74,7 +81,10 @@ class Game:
         self.grass_2 = pg.image.load(path.join(img_folder, \
                                                 "grass_2.png")).convert()
 
-
+        #Colocando musicas
+        musica = random.choice([J3_folder,Naruto_folder, Skank_folder, Ronaldo_folder, Nascido_folder])
+        pg.mixer.music.load(musica)
+        pg.mixer.music.play(-1)
         #Criando objetos
         self.bola = Bola(WIDTH/2 ,HEIGHT/2,11,self.SoccerBall)
         self.player1 = Jogador(self,WIDTH*1/3,self.jogadores_1[self.num],0)
@@ -140,16 +150,6 @@ class Game:
             poder = Powerup(self)
             self.all_sprites.add(poder)
             self.powerups.add(poder)
-
-
-
-    '''def playMusicJ3():
-        pg.mixer.music.load(J3)
-        pg.mixer.music.play(-1, 0.0)'''
-
-    '''def playMusicNaruto():
-        pg.mixer.music.load(Naruto)
-        pg.mixer.music.play(-1, 0.0)'''
 
     def colision(self):
         #Colisao dentro entre jogador campo
@@ -296,6 +296,7 @@ class Game:
                 self.player2.powerup_gelo()
             if hit.type == 'velocidade':
                 self.player2.powerup_raio()
+    
     def events(self):
         #Game loop events
         for event in pg.event.get():
@@ -333,6 +334,9 @@ class Game:
     def show_start_screen(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, "Imagens")
+        Guime_folder = path.join(game_folder, "Musicas", 'Guime.mp3')
+        pg.mixer.music.load(Guime_folder)
+        pg.mixer.music.play(-1)
 
         self.fundo = pg.image.load(path.join(img_folder, "background1.JPG")).convert_alpha()
         self.titulo = pg.image.load(path.join(img_folder, "titulo.PNG")).convert_alpha() #imagem do titulo
@@ -402,7 +406,7 @@ class Game:
         self.c6en = pg.image.load(path.join(img_folder, "ronalducho_selecionado2.png")).convert_alpha()
         self.c7en = pg.image.load(path.join(img_folder, "rooney_selecionado2.png")).convert_alpha()
         self.fundo = pg.image.load(path.join(img_folder, "background1.JPG")).convert_alpha()
-        
+
         self.background1 = pg.transform.scale(self.fundo,(WIDTH,HEIGHT)) #fundo
         #menu
         self.background2 = self.background1.get_rect()
@@ -434,7 +438,7 @@ class Game:
             self.button(self.c6e,150,300,60,60,self.c6en,'c6e')
             self.button(self.c7e,200,300,60,60,self.c7en,'c7e')
             self.timer_menu = pg.time.get_ticks()/1000
-            
+
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -463,45 +467,45 @@ class Game:
                     self.intro = False
                     print(1)
                     self.show_GO_screen()
-                    
+
 
 
                 elif action == "quit":
                     pg.quit()
                     quit()
 
-                
+
                 elif action == "jogar":
                     print(2)
                     self.new()
                 elif action == "c1":
-                    self.num = 0 
+                    self.num = 0
                 elif action == "c2":
-                    self.num = 1     
+                    self.num = 1
                 elif action == "c3":
-                    self.num = 2 
+                    self.num = 2
                 elif action == "c4":
-                    self.num = 3 
+                    self.num = 3
                 elif action == "c5":
                     self.num = 4
                 elif action == "c6":
-                    self.num = 5 
+                    self.num = 5
                 elif action == "c7":
-                    self.num = 6      
+                    self.num = 6
                 elif action == "c1e":
-                    self.num1 = 0 
+                    self.num1 = 0
                 elif action == "c2e":
-                    self.num1 = 1     
+                    self.num1 = 1
                 elif action == "c3e":
-                    self.num1 = 2 
+                    self.num1 = 2
                 elif action == "c4e":
-                    self.num1 = 3 
+                    self.num1 = 3
                 elif action == "c5e":
-                    self.num1 = 4 
+                    self.num1 = 4
                 elif action == "c6e":
                     self.num1 = 5
                 elif action == "c7e":
-                    self.num1 = 6            
+                    self.num1 = 6
         else:
             self.screen.blit(img1, (x,y))
 
@@ -515,6 +519,7 @@ class Game:
                     self.running = False
                 if event.type == pg.KEYUP:
                     waiting = False
+
 g = Game()
 g.show_start_screen()
 while g.running:
