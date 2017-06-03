@@ -227,7 +227,7 @@ class Jogador(pg.sprite.Sprite):
 
 
     def dash(self):
-        self.vel.x = self.vel.x * 4
+        self.vel.x = self.vel.x * 2
 
 
     def powerup_raio(self):
@@ -270,8 +270,7 @@ class Powerup(pg.sprite.Sprite):
     def __init__(self,game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        #self.type = random.choice(['crescer','diminuir','velocidade','gelo'])
-        self.type = random.choice(['velocidade'])
+        self.type = random.choice(['crescer','diminuir','velocidade','gelo'])
         self.image = self.game.powerup_images[self.type]
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()

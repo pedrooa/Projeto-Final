@@ -22,6 +22,7 @@ class Game:
         self.intro = True
         self.num = 0
         self.num1 = 0
+        self.Fullscreen = False
 
     def new(self):
         #start a new game
@@ -322,7 +323,12 @@ class Game:
                     self.player1.dash()
                 if event.key == pg.K_DOWN:
                     self.player2.dash()
-
+                if event.key == pg.K_f:
+                    self.Fullscreen = not self.Fullscreen
+                    if self.Fullscreen == True:
+                        self.screen = pg.display.set_mode((WIDTH, HEIGHT), pg.FULLSCREEN, 32)
+                    else:
+                        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
     def draw(self):
         #Game loop draw
         # Draw / render
@@ -385,6 +391,13 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_f:
+                        self.Fullscreen = not self.Fullscreen
+                        if self.Fullscreen == True:
+                            self.screen = pg.display.set_mode((WIDTH, HEIGHT), pg.FULLSCREEN, 32)
+                        else:
+                            self.screen = pg.display.set_mode((WIDTH, HEIGHT))
 
             pg.display.update()
 

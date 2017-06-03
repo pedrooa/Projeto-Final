@@ -14,7 +14,7 @@ PLAYER_H = 50
 PLAYER_RAIO = 24
 WIDTH = 876
 HEIGHT = 573
-FPS = 40
+FPS = 30
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -25,7 +25,7 @@ BLUE = (0, 0, 255)
 #setting para a movimentacao com vetor
 aceleração_maxima = 0.9
 atrito = -0.12
-atrito_powerup = -0.005
+atrito_powerup = -0.010
 atrito_gelo = -0.30
 gravidade = 0.7
 
