@@ -4,7 +4,6 @@ import random
 from settings import *
 vetor = pg.math.Vector2
 
-
 class Trave(pg.sprite.Sprite):
     def __init__(self,traves,x,y,game):
         pg.sprite.Sprite.__init__(self)
@@ -78,10 +77,9 @@ class Bola(pg.sprite.Sprite):
         self.last_update = pg.time.get_ticks()
         self.mask = pg.mask.from_surface(self.image)
         self.trilha = []
-        self.counter = pg.time.Clock()
 
     def update(self):
-        self.acc = vetor(0,0.4)
+        self.acc = vetor(0,gravidade_bola)
         self.quicar()
         self.rotate()
         self.vel*= arrasto
@@ -97,21 +95,27 @@ class Bola(pg.sprite.Sprite):
             self.pos.x = 2*(WIDTH - self.radius) - self.pos.x
             self.vel.x = -self.vel.x
             self.vel*= elasticidade
+            pg.mixer.Sound.play(bola_som)
+
 
         elif self.pos.x < self.radius:
             self.pos.x = 2*self.radius - self.pos.x
             self.vel.x = -self.vel.x
             self.vel*=elasticidade
+            pg.mixer.Sound.play(bola_som)
 
         if self.pos.y > HEIGHT-30 - self.radius:
             self.pos.y = 2*(HEIGHT-30 - self.radius) - self.pos.y
             self.vel.y = -self.vel.y
             self.vel*=elasticidade
+            if self.vel.y < -1:
+                pg.mixer.Sound.play(bola_som)
 
         elif self.pos.y < self.radius:
             self.pos.y = 2*self.radius - self.pos.y
             self.vel.y = -self.vel.y
             self.vel*=elasticidade
+            pg.mixer.Sound.play(bola_som)
 
     def collide(self,other):
         dx = self.rect.x - other.rect.x
@@ -121,11 +125,12 @@ class Bola(pg.sprite.Sprite):
         soma_raios = self.radius + other.radius
 
         if dist < soma_raios:
+            pg.mixer.Sound.play(bola_som)
             force = 6*(soma_raios - dist)
             v = vetor(other.rect.x-self.rect.x,other.rect.y-self.rect.y)
             versor = v/dist
             FEL = force*versor
-            self.vel -= 0.12*FEL
+            self.vel -= 0.08*FEL
 
     def rotate(self):
         now = pg.time.get_ticks()
@@ -150,11 +155,11 @@ class Bola(pg.sprite.Sprite):
                 self.rect  = self.image.get_rect()
                 self.rect_center = old_center
 
-    def desenha_trilha(self):
+    """def desenha_trilha(self):
         if self.counter >= 1000:
             posicao = (self.pos.x, self.pos.y)
             self.trilha.append(posicao)
-            self.counter = pg.time.Clock()
+            self.counter = pg.time.Clock()"""
 
 class Jogador(pg.sprite.Sprite):
     def __init__(self,game,x,imagem,teclas):
@@ -181,7 +186,7 @@ class Jogador(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, self.game.plataformas, False)
         self.rect.y -= 1
         if hits:
-            self.vel.y = -12
+            self.vel.y = vel_pulo
 
     def update(self):
         if self.power == 2 and pg.time.get_ticks() - self.power_time > POWERUP_TIME:
